@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
-import { Auth } from '../../../../@types/db';
-import { createSchema } from '../../../../utils';
-import { DBCollections } from '../../../../utils/constants';
+import { Auth } from '../../../@types/db';
+import { createSchema } from '../../../utils';
+import { DBCollections } from '../../../utils/constants';
 
 const AuthSchema = createSchema<Auth>({
   user: {

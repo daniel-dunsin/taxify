@@ -1,8 +1,8 @@
 import mongoose from 'mongoose';
-import { User } from '../../../../@types/db';
-import { Role } from '../../../../@types/enums';
-import { createSchema } from '../../../../utils';
-import { DBCollections } from '../../../../utils/constants';
+import { createSchema } from '../../../utils';
+import { User } from '../../../@types/db';
+import { Role } from '../../../@types/enums';
+import { DBCollections } from '../../../utils/constants';
 
 const UserSchema = createSchema<User>({
   firstName: {
@@ -28,6 +28,7 @@ const UserSchema = createSchema<User>({
 
   profile_picture_id: {
     type: String,
+    select: false,
   },
 
   role: {

@@ -1,8 +1,8 @@
 import mongoose from 'mongoose';
-import { Token } from '../../../../@types/db';
-import { TokenType } from '../../../../@types/enums';
-import { createSchema } from '../../../../utils';
-import { DBCollections } from '../../../../utils/constants';
+import { Token } from '../../../@types/db';
+import { TokenType } from '../../../@types/enums';
+import { createSchema } from '../../../utils';
+import { DBCollections } from '../../../utils/constants';
 
 const TokenSchema = createSchema<Token>({
   identifier: {

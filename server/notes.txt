@@ -1,0 +1,5 @@
+On Mobile 
+- select vehicle type
+- select makes with vehicle type name
+- enter year (optional)
+- if year /vehicles/GetModelsForMakeYear/make/honda/modelyear/2015/vehicletype/truck?format=json else /vehicles/GetModelsForMakeYear/make/honda/vehicletype/truck?format=csv 

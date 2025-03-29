@@ -9,3 +9,20 @@ export enum Role {
   Driver = 'Driver',
   Admin = 'Admin',
 }
+
+export enum VerificationDocuments {
+  NIN = 'National Identification Number (NIN)',
+  DRIVERS_LICENSE = "Driver's license",
+  VEHICLE_REGISTRATION = 'Vehicle Registration Certificate',
+}
+
+export enum VehicleType {
+  Economy = 'Economy',
+  SUV = 'SUV',
+  Premium = 'Premium',
+}
+
+export enum DriverStatus {
+  ACTIVE = 'ACTIVE',
+  INACTIVE = 'INACTIVE',
+}

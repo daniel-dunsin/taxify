@@ -52,4 +52,9 @@ export enum DBCollections {
   Auth = 'auth',
   Token = 'token',
   User = 'user',
+  Driver = 'driver',
+  VerificationDocument = 'verification_document',
+  Vehicle = 'vehicle',
+  VehicleGroup = 'vehicle_group',
+  VehicleCategory = 'vehicle_category',
 }
