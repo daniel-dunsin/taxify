@@ -54,6 +54,7 @@ export interface Driver extends DbMixins {
 export interface VerificationDocument extends DbMixins {
   name: VerificationDocuments;
   url: string;
+  upload_id: string;
   text: string;
   driver: Driver;
   vehicle: Vehicle;

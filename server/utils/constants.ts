@@ -1,6 +1,6 @@
 import { config } from 'dotenv';
-import Joi from 'joi';
 import { HttpError } from '../@types/globals';
+import * as Joi from '@hapi/joi';
 
 config();
 

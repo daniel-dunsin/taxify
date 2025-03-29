@@ -10,7 +10,6 @@ const VehicleGroupSchema = createSchema<VehicleGroup>({
     enum: Object.values(VehicleType),
     required: true,
   },
-
   min_fare: {
     type: Number,
     default: 0,

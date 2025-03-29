@@ -2,14 +2,18 @@ import mongoose from 'mongoose';
 import { VerificationDocument } from '../../../@types/db';
 import { createSchema } from '../../../utils';
 import { DBCollections } from '../../../utils/constants';
+import { VerificationDocuments } from '../../../@types/enums';
 
 const VerificationDocumentSchema = createSchema<VerificationDocument>({
   name: {
     type: String,
-    enum: Object.values(DocumentType),
+    enum: Object.values(VerificationDocuments),
     required: true,
   },
   url: {
+    type: String,
+  },
+  upload_id: {
     type: String,
   },
   text: {
