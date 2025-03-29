@@ -1,0 +1,43 @@
+{
+  "name": "taxify-server",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "node dist/server.js",
+    "dev": "nodemon server.ts",
+    "build": "tsc -p ./tsconfig.json",
+    "lint": "eslint ."
+  },
+  "author": "Daniel Adejare",
+  "license": "ISC",
+  "description": "",
+  "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e",
+  "dependencies": {
+    "@types/cors": "^2.8.17",
+    "@types/express": "^5.0.1",
+    "@types/mongoose": "^5.11.97",
+    "@types/node": "^22.13.14",
+    "argon": "^2.0.21",
+    "bull": "^4.16.5",
+    "cors": "^2.8.5",
+    "date-fns": "^4.1.0",
+    "dotenv": "^16.4.7",
+    "eslint": "^9.23.0",
+    "express": "^4.21.2",
+    "express-rate-limit": "^7.5.0",
+    "helmet": "^8.1.0",
+    "joi": "^17.13.3",
+    "jsonwebtoken": "^9.0.2",
+    "lodash": "^4.17.21",
+    "log4js": "^6.9.1",
+    "mongoose": "^8.13.1",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.2",
+    "xss-clean": "^0.1.4"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.23.0",
+    "globals": "^16.0.0",
+    "typescript-eslint": "^8.28.0"
+  }
+}
