@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import { ObjectSchema } from '@hapi/joi';
-import { HttpError } from '../../../@types/globals';
+import { HttpError } from '../@types/globals';
 import { HttpStatusCode } from '../../../utils/constants';
 import { isEmpty } from 'lodash';
 

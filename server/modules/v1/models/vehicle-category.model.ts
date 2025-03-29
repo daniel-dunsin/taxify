@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { VehicleCategory } from '../../../@types/db';
+import { VehicleCategory } from '../@types/db';
 import { createSchema } from '../../../utils';
 import { DBCollections } from '../../../utils/constants';
 
@@ -10,9 +10,11 @@ const VehicleCategorySchema = createSchema<VehicleCategory>({
   image: {
     type: String,
   },
-  image_id: {
+  map_image: {
     type: String,
-    select: false,
+  },
+  image_large: {
+    type: String,
   },
   rate_discount_amount: {
     type: Number,

@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { Auth } from '../../../@types/db';
+import { Auth } from '../@types/db';
 import { createSchema } from '../../../utils';
 import { DBCollections } from '../../../utils/constants';
 

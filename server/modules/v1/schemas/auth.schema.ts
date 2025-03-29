@@ -20,8 +20,10 @@ export const driverSignUpSchema = Joi.object({
     phoneNumber: Joi.string().required(),
     profilePicture: Joi.string().required(),
     nin: Joi.string().optional(),
-    drivers_license_number: Joi.string().optional(),
-    drivers_license_document: Joi.string().required(),
+    nin_number: Joi.string().required(),
+    birth_certificate: Joi.string().required(),
+    drivers_license_front_image: Joi.string().required(),
+    drivers_license_back_image: Joi.string().required(),
     vehicle_category_id: Joi.string().required(),
     vehicle_make: Joi.string().required(),
     vehicle_model: Joi.string().required(),
@@ -29,7 +31,15 @@ export const driverSignUpSchema = Joi.object({
     vehicle_plate_number: Joi.string().required(),
     passengers_count: Joi.number().required().min(1),
     vehicle_registration_certificate: Joi.string().required(),
+    vehicle_registration_date: Joi.date().strict(false),
+    vehicle_color: Joi.string().required(),
+    account_number: Joi.string().required(),
+    account_name: Joi.string().required(),
+    bank_name: Joi.string().required(),
+    bank_code: Joi.string().required(),
   }),
 });
 
-export type DriverSignUpDto = Joi.extractType<typeof driverSignUpSchema>;
+export type DriverSignUpDto = Joi.extractType<
+  typeof driverSignUpSchema
+>['body'];

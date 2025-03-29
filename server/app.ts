@@ -3,7 +3,7 @@ import cors from 'cors';
 import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
 import { errorHandler } from './utils';
-import { HttpError } from './@types/globals';
+import { HttpError } from './modules/v1/@types/globals';
 import router from './modules/v1';
 import { HttpStatusCode } from './utils/constants';
 

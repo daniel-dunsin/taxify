@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
-import { VehicleGroup } from '../../../@types/db';
-import { VehicleType } from '../../../@types/enums';
+import { VehicleGroup } from '../@types/db';
+import { VehicleType } from '../@types/enums';
 import { createSchema } from '../../../utils';
 import { DBCollections } from '../../../utils/constants';
 

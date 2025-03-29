@@ -14,6 +14,7 @@ export enum VerificationDocuments {
   NIN = 'National Identification Number (NIN)',
   DRIVERS_LICENSE = "Driver's license",
   VEHICLE_REGISTRATION = 'Vehicle Registration Certificate',
+  BIRTH_CERTIFICATE = 'Birth Certificate',
 }
 
 export enum VehicleType {

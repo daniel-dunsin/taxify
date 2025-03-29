@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { Vehicle } from '../../../@types/db';
+import { Vehicle } from '../@types/db';
 import { createSchema } from '../../../utils';
 import { DBCollections } from '../../../utils/constants';
 
@@ -32,6 +32,16 @@ const VehicleSchema = createSchema<Vehicle>({
   category: {
     type: String,
     ref: DBCollections.VehicleCategory,
+  },
+  color: {
+    type: String,
+  },
+  registration_date: {
+    type: Date,
+  },
+  rules: {
+    type: [String],
+    default: [],
   },
 });
 

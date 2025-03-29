@@ -17,6 +17,13 @@ export type Location = {
   coordinates: [number, number];
 };
 
+export type BankDetails = {
+  account_number: string;
+  account_name: string;
+  bank_code: string;
+  bank_name: string;
+};
+
 export interface Auth extends DbMixins {
   user: User;
   password: string;
@@ -41,7 +48,6 @@ export interface User extends DbMixins {
   role: Role;
   profile_picture: string;
   profile_picture_id: string;
-  current_location: Location;
 }
 
 export interface Driver extends DbMixins {
@@ -53,8 +59,10 @@ export interface Driver extends DbMixins {
 
 export interface VerificationDocument extends DbMixins {
   name: VerificationDocuments;
-  url: string;
-  upload_id: string;
+  front_image_url: string;
+  back_image_url: string;
+  front_image_id: string;
+  back_image_id: string;
   text: string;
   driver: Driver;
   vehicle: Vehicle;
@@ -70,6 +78,9 @@ export interface Vehicle extends DbMixins {
   plate_number: string;
   passengers_count: number;
   category: VehicleCategory;
+  color: string;
+  registration_date: Date;
+  rules: string[];
 }
 
 export interface VehicleGroup {
@@ -82,6 +93,15 @@ export interface VehicleGroup {
 export interface VehicleCategory extends DbMixins {
   name: string;
   image: string;
-  image_id: string;
   rate_discount_amount: number;
+  map_image: string;
+  image_large: string;
+}
+
+export interface Wallet extends DbMixins, BankDetails {
+  driver: Driver;
+  user: User;
+  balance: number;
+  currency: string;
+  currency_symbol: string;
 }

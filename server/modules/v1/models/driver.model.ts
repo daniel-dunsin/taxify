@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
-import { Driver } from '../../../@types/db';
-import { DriverStatus } from '../../../@types/enums';
+import { Driver } from '../@types/db';
+import { DriverStatus } from '../@types/enums';
 import { createSchema } from '../../../utils';
 import { DBCollections } from '../../../utils/constants';
 

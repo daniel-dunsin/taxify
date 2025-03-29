@@ -1,5 +1,5 @@
 import { config } from 'dotenv';
-import { HttpError } from '../@types/globals';
+import { HttpError } from '../modules/v1/@types/globals';
 import * as Joi from '@hapi/joi';
 
 config();
@@ -30,6 +30,11 @@ export const Env = {
       PORT: Joi.string().required(),
       DATABASE_URL: Joi.string().required(),
       JWT_SECRET: Joi.string().required(),
+      MAILER_PASSWORD: Joi.string().required(),
+      MAILER_USER: Joi.string().required(),
+      CLOUDINARY_API_KEY: Joi.string().required(),
+      CLOUDINARY_API_SECRET: Joi.string().required(),
+      CLOUDINARY_CLOUD_NAME: Joi.string().required(),
     })
       .strict(false)
       .unknown(true)
@@ -46,6 +51,15 @@ export const Env = {
   port: <string>process.env.PORT,
   databaseUrl: <string>process.env.DATABASE_URL,
   jwtSecret: <string>process.env.JWT_SECRET,
+  mailer: {
+    password: <string>process.env.MAILER_PASSWORD,
+    user: <string>process.env.MAILER_USER,
+  },
+  cloudinary: {
+    cloudName: <string>process.env.CLOUDINARY_CLOUD_NAME,
+    apiSecret: <string>process.env.CLOUDINARY_API_SECRET,
+    apiKey: <string>process.env.CLOUDINARY_API_KEY,
+  },
 };
 
 export enum DBCollections {
@@ -57,4 +71,5 @@ export enum DBCollections {
   Vehicle = 'vehicle',
   VehicleGroup = 'vehicle_group',
   VehicleCategory = 'vehicle_category',
+  Wallet = 'wallet',
 }

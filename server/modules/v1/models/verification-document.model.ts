@@ -1,8 +1,8 @@
 import mongoose from 'mongoose';
-import { VerificationDocument } from '../../../@types/db';
+import { VerificationDocument } from '../@types/db';
 import { createSchema } from '../../../utils';
 import { DBCollections } from '../../../utils/constants';
-import { VerificationDocuments } from '../../../@types/enums';
+import { VerificationDocuments } from '../@types/enums';
 
 const VerificationDocumentSchema = createSchema<VerificationDocument>({
   name: {
@@ -10,10 +10,16 @@ const VerificationDocumentSchema = createSchema<VerificationDocument>({
     enum: Object.values(VerificationDocuments),
     required: true,
   },
-  url: {
+  front_image_id: {
     type: String,
   },
-  upload_id: {
+  front_image_url: {
+    type: String,
+  },
+  back_image_id: {
+    type: String,
+  },
+  back_image_url: {
     type: String,
   },
   text: {
