@@ -47,3 +47,9 @@ export const Env = {
   databaseUrl: <string>process.env.DATABASE_URL,
   jwtSecret: <string>process.env.JWT_SECRET,
 };
+
+export enum DBCollections {
+  Auth = 'auth',
+  Token = 'token',
+  User = 'user',
+}

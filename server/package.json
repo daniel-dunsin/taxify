@@ -17,6 +17,7 @@
     "@types/express": "^5.0.1",
     "@types/mongoose": "^5.11.97",
     "@types/node": "^22.13.14",
+    "@types/uuid": "^10.0.0",
     "argon": "^2.0.21",
     "bull": "^4.16.5",
     "cors": "^2.8.5",
@@ -33,6 +34,7 @@
     "mongoose": "^8.13.1",
     "ts-node": "^10.9.2",
     "typescript": "^5.8.2",
+    "uuid": "^11.1.0",
     "xss-clean": "^0.1.4"
   },
   "devDependencies": {

@@ -2,6 +2,8 @@ import { NextFunction, Request, Response } from 'express';
 import { HttpError } from '../@types/globals';
 import Logger from '../configs/logger';
 import { HttpStatusCode } from './constants';
+import { Schema, SchemaDefinition, SchemaDefinitionType } from 'mongoose';
+import { v4 } from 'uuid';
 
 export function errorHandler(
   error: Error,
@@ -40,4 +42,29 @@ export async function asyncHandler(
       return next(error);
     }
   };
+}
+
+export function createSchema<T = any>(
+  modelDefinition: SchemaDefinition<SchemaDefinitionType<T>>
+) {
+  return new Schema<T>(
+    {
+      _id: {
+        type: String,
+        default: () => v4(),
+      },
+      ...modelDefinition,
+    },
+    {
+      virtuals: true,
+      id: false,
+      versionKey: false,
+      toJSON: {
+        virtuals: true,
+      },
+      toObject: {
+        virtuals: true,
+      },
+    }
+  );
 }
