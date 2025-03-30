@@ -1,10 +1,9 @@
 {
   "name": "taxify-server",
   "version": "1.0.0",
-  "main": "index.js",
   "scripts": {
     "start": "node dist/server.js",
-    "dev": "nodemon server.ts",
+    "dev": "nodemon src/server.ts",
     "build": "tsc -p ./tsconfig.json",
     "lint": "eslint ."
   },
@@ -19,6 +18,7 @@
     "@types/lodash": "^4.17.16",
     "@types/mongoose": "^5.11.97",
     "@types/node": "^22.13.14",
+    "@types/nodemailer": "^6.4.17",
     "@types/uuid": "^10.0.0",
     "argon": "^2.0.21",
     "bull": "^4.16.5",
@@ -26,6 +26,7 @@
     "cors": "^2.8.5",
     "date-fns": "^4.1.0",
     "dotenv": "^16.4.7",
+    "ejs": "^3.1.10",
     "eslint": "^9.23.0",
     "express": "^4.21.2",
     "express-rate-limit": "^7.5.0",

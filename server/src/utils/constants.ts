@@ -30,11 +30,16 @@ export const Env = {
       PORT: Joi.string().required(),
       DATABASE_URL: Joi.string().required(),
       JWT_SECRET: Joi.string().required(),
-      MAILER_PASSWORD: Joi.string().required(),
+      MAILER_PASS: Joi.string().required(),
       MAILER_USER: Joi.string().required(),
       CLOUDINARY_API_KEY: Joi.string().required(),
       CLOUDINARY_API_SECRET: Joi.string().required(),
       CLOUDINARY_CLOUD_NAME: Joi.string().required(),
+      REDIS_PORT: Joi.string().required(),
+      REDIS_HOST: Joi.string().required(),
+      REDIS_USERNAME: Joi.string().required(),
+      REDIS_PASSWORD: Joi.string().required(),
+      PAYSTACK_SECRET_KEY: Joi.string().required(),
     })
       .strict(false)
       .unknown(true)
@@ -51,14 +56,21 @@ export const Env = {
   port: <string>process.env.PORT,
   databaseUrl: <string>process.env.DATABASE_URL,
   jwtSecret: <string>process.env.JWT_SECRET,
+  paystackSecretKey: <string>process.env.PAYSTACK_SECRET_KEY,
   mailer: {
-    password: <string>process.env.MAILER_PASSWORD,
+    password: <string>process.env.MAILER_PASS,
     user: <string>process.env.MAILER_USER,
   },
   cloudinary: {
     cloudName: <string>process.env.CLOUDINARY_CLOUD_NAME,
     apiSecret: <string>process.env.CLOUDINARY_API_SECRET,
     apiKey: <string>process.env.CLOUDINARY_API_KEY,
+  },
+  redis: {
+    port: <string>process.env.REDIS_PORT,
+    host: <string>process.env.REDIS_HOST,
+    username: <string>process.env.REDIS_USERNAME,
+    password: <string>process.env.REDIS_PASSWORD,
   },
 };
 

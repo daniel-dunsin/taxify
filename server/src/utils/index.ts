@@ -5,6 +5,7 @@ import { Env, HttpStatusCode } from './constants';
 import { Schema, SchemaDefinition, SchemaDefinitionType } from 'mongoose';
 import { v4 } from 'uuid';
 import { v2 as cloudinary_v2, UploadApiOptions } from 'cloudinary';
+import path from 'path';
 
 export function errorHandler(
   error: Error,
@@ -12,7 +13,7 @@ export function errorHandler(
   res: Response,
   next: NextFunction
 ): any {
-  const logger = new Logger('error_handler');
+  const logger = new Logger('app');
 
   logger.error(JSON.stringify(error));
 
@@ -77,7 +78,7 @@ cloudinary_v2.config({
 });
 
 export async function uploadAsset(fileOrPath: any, options?: UploadApiOptions) {
-  const logger = new Logger('AssetService');
+  const logger = new Logger('assetService');
 
   try {
     const { secure_url, public_id } = await cloudinary_v2.uploader.upload(
@@ -107,7 +108,7 @@ export async function uploadAsset(fileOrPath: any, options?: UploadApiOptions) {
 }
 
 export async function deleteAsset(public_id: string) {
-  const logger = new Logger('AssetService');
+  const logger = new Logger('assetService');
 
   try {
     await cloudinary_v2.uploader.destroy(public_id);
@@ -121,3 +122,7 @@ export async function deleteAsset(public_id: string) {
     );
   }
 }
+
+export const renderEmailTemplate = (template: string, data: any) => {
+  const template_path = path.join(__dirname);
+};

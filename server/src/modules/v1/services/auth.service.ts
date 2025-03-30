@@ -1,3 +1,3 @@
 import Logger from '../../../configs/logger';
 
-const logger = new Logger('AuthService');
+const logger = new Logger('authService');

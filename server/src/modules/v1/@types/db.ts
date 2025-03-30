@@ -94,8 +94,7 @@ export interface VehicleCategory extends DbMixins {
   name: string;
   image: string;
   rate_discount_amount: number;
-  map_image: string;
-  image_large: string;
+  map_image?: string;
 }
 
 export interface Wallet extends DbMixins, BankDetails {

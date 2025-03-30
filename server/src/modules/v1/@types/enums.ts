@@ -20,7 +20,7 @@ export enum VerificationDocuments {
 export enum VehicleType {
   Economy = 'Economy',
   SUV = 'SUV',
-  Premium = 'Premium',
+  Luxury = 'Luxury',
 }
 
 export enum DriverStatus {

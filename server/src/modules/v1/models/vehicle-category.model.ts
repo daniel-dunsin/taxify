@@ -13,9 +13,6 @@ const VehicleCategorySchema = createSchema<VehicleCategory>({
   map_image: {
     type: String,
   },
-  image_large: {
-    type: String,
-  },
   rate_discount_amount: {
     type: Number,
     min: 0,
