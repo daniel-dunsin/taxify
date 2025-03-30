@@ -6,6 +6,10 @@ import { Schema, SchemaDefinition, SchemaDefinitionType } from 'mongoose';
 import { v4 } from 'uuid';
 import { v2 as cloudinary_v2, UploadApiOptions } from 'cloudinary';
 import path from 'path';
+import ejs from 'ejs';
+import { generate } from 'otp-generator';
+import Jwt, { SignOptions } from 'jsonwebtoken';
+import argon from 'argon2';
 
 export function errorHandler(
   error: Error,
@@ -22,7 +26,6 @@ export function errorHandler(
       success: false,
       message: error.message,
       name: error.name,
-      stackTrace: error.stackTrace,
     });
   }
 
@@ -34,12 +37,29 @@ export function errorHandler(
   });
 }
 
-export async function asyncHandler(
+export function asyncHandler(
   callback: (req: Request, res: Response, next: NextFunction) => void
 ) {
   return async (req: Request, res: Response, next: NextFunction) => {
     try {
-      return callback(req, res, next);
+      const response = await callback(req, res, next);
+
+      let statusCode = 200;
+
+      switch (req.method) {
+        case 'POST':
+          statusCode = 201;
+          break;
+        default:
+          statusCode = 200;
+      }
+
+      res.status(201).json(
+        response ?? {
+          msg: 'successful',
+          success: true,
+        }
+      );
     } catch (error) {
       return next(error);
     }
@@ -123,6 +143,76 @@ export async function deleteAsset(public_id: string) {
   }
 }
 
-export const renderEmailTemplate = (template: string, data: any) => {
-  const template_path = path.join(__dirname);
+export const renderEmailTemplate = (template: string, data: any = {}) => {
+  const template_path = path.join(
+    __dirname,
+    '../../src/modules/v1/templates',
+    template
+  );
+
+  let html = '';
+
+  ejs.renderFile(template_path, data, (err, data) => {
+    if (err) {
+      throw err;
+    }
+
+    html = data;
+  });
+
+  return html;
+};
+
+export const formatCountryPhoneNumber = (
+  phoneNumber: string,
+  countryCode = '234'
+) => {
+  if (phoneNumber.startsWith('+')) {
+    return phoneNumber.substring(1);
+  }
+  if (phoneNumber.startsWith('0')) {
+    return countryCode + phoneNumber.substring(1);
+  }
+  if (phoneNumber.startsWith(countryCode)) {
+    return phoneNumber;
+  }
+  return `${countryCode}${phoneNumber}`;
+};
+
+export const generateOtp = (length: number = 4) => {
+  if (Env.nodeEnv === 'development') {
+    return '1234';
+  }
+
+  return generate(length, {
+    lowerCaseAlphabets: false,
+    upperCaseAlphabets: false,
+    specialChars: false,
+    digits: true,
+  });
+};
+
+export const signJwt = (payload: any, options?: SignOptions) => {
+  const ACCESS_TOKEN_EXPIRES_AT = '30d';
+
+  return Jwt.sign(payload, Env.jwtSecret, {
+    algorithm: 'HS256',
+    expiresIn: ACCESS_TOKEN_EXPIRES_AT,
+    ...options,
+  });
+};
+
+export const verifyJwt = async (token: string) => {
+  return Jwt.verify(token, Env.jwtSecret, {
+    algorithms: ['HS256'],
+    ignoreExpiration: false,
+  });
+};
+
+export const hashString = async (plain: string) => {
+  return await argon.hash(plain);
+};
+
+export const verifyHash = async (plain: string, hash: string) => {
+  return await argon.verify(plain, hash);
 };

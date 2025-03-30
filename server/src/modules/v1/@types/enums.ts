@@ -1,6 +1,5 @@
 export enum TokenType {
-  password_reset = 'password_reset',
-  account_verification = 'account_verification',
+  accountVerification = 'accountVerification',
   login = 'login',
 }
 

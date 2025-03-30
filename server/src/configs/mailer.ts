@@ -1,4 +1,5 @@
 import { EmailDto } from '../modules/v1/@types';
+import { renderEmailTemplate } from '../utils';
 import { Env } from '../utils/constants';
 import Logger from './logger';
 import { createTransport } from 'nodemailer';
@@ -24,6 +25,7 @@ export const sendMail = async (emailDto: EmailDto) => {
       from: "'No Reply' <noreply@taxify.com>",
       to: emailDto.to,
       subject: emailDto.subject,
+      html: renderEmailTemplate(emailDto.template, emailDto.context),
     });
     logger.log('Mail sent successfully');
   } catch (error) {

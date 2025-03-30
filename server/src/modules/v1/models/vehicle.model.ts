@@ -15,7 +15,7 @@ const VehicleSchema = createSchema<Vehicle>({
     type: String,
   },
   year: {
-    type: String,
+    type: Number,
   },
   driver: {
     type: String,

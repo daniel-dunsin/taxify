@@ -26,11 +26,9 @@ export type BankDetails = {
 
 export interface Auth extends DbMixins {
   user: User;
-  password: string;
-  password_history: string[];
   email_verified: boolean;
   accessToken: string;
-  refreshToken: string;
+  accessTokenExpiresAt: Date;
 }
 
 export interface Token extends DbMixins {
@@ -73,7 +71,7 @@ export interface Vehicle extends DbMixins {
   group: VehicleGroup;
   make: string;
   model: string;
-  year: string;
+  year: number;
   driver: Driver;
   plate_number: string;
   passengers_count: number;

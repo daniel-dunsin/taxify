@@ -7,7 +7,9 @@ import Logger from '../../../configs/logger';
 const logger = new Logger('queues');
 const queueName = 'emailQueue';
 
-const emailQueue = new Queue(queueName, { redis: redisConfig });
+export const emailQueue = new Queue<EmailDto>(queueName, {
+  redis: redisConfig,
+});
 
 emailQueue.process(async (job: Job<EmailDto>, done) => {
   try {
@@ -28,5 +30,5 @@ emailQueue.on('failed', (job: Job) => {
 });
 
 emailQueue.on('completed', (job: Job) => {
-  logger.error(`${queueName} ${job.id} completed, Job: ${JSON.stringify(job)}`);
+  logger.log(`${queueName} ${job.id} completed, Job: ${JSON.stringify(job)}`);
 });

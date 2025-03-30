@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 import { createSchema } from '../../../utils';
 import { User } from '../@types/db';
 import { Role } from '../@types/enums';
-import { DBCollections } from '../../../utils/constants';
+import { DBCollections, Images } from '../../../utils/constants';
 
 const UserSchema = createSchema<User>({
   firstName: {
@@ -24,6 +24,7 @@ const UserSchema = createSchema<User>({
 
   profile_picture: {
     type: String,
+    default: Images.profile_picture,
   },
 
   profile_picture_id: {

@@ -10,15 +10,6 @@ const AuthSchema = createSchema<Auth>({
     required: true,
   },
 
-  password: {
-    type: String,
-  },
-
-  password_history: {
-    type: [String],
-    default: [],
-  },
-
   email_verified: {
     type: Boolean,
     default: false,
@@ -28,8 +19,8 @@ const AuthSchema = createSchema<Auth>({
     type: String,
   },
 
-  refreshToken: {
-    type: String,
+  accessTokenExpiresAt: {
+    type: Date,
   },
 });
 

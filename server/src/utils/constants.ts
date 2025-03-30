@@ -72,6 +72,9 @@ export const Env = {
     username: <string>process.env.REDIS_USERNAME,
     password: <string>process.env.REDIS_PASSWORD,
   },
+  nodeEnv: <'development' | 'production' | 'staging'>(
+    (process.env.NODE_ENV || 'development')
+  ),
 };
 
 export enum DBCollections {
@@ -85,3 +88,8 @@ export enum DBCollections {
   VehicleCategory = 'vehicle_category',
   Wallet = 'wallet',
 }
+
+export const Images = {
+  profile_picture:
+    'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
+};

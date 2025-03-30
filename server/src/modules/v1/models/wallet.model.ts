@@ -28,6 +28,16 @@ const WalletSchema = createSchema<Wallet>({
     type: String,
     ref: DBCollections.Driver,
   },
+  currency: {
+    type: String,
+    default: 'NGN',
+  },
+  currency_symbol: {
+    type: String,
+    default: '₦',
+  },
 });
 
 const walletModel = mongoose.model(DBCollections.Wallet, WalletSchema);
+
+export default walletModel;
