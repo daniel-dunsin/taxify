@@ -39,7 +39,11 @@ class ContainedButton extends StatelessWidget {
       onPressed: onPressed,
       label: child,
       style: ElevatedButton.styleFrom(
-        backgroundColor: backgroundColor ?? getColorSchema(context).onPrimary,
+        backgroundColor:
+            backgroundColor ??
+            (checkLightMode(context)
+                ? getColorSchema(context).onPrimary
+                : AppColors.accent),
         minimumSize: Size(120, 40),
         fixedSize: Size(width ?? 200, height ?? 50),
         foregroundColor: foregroundColor ?? getColorSchema(context).primary,
@@ -49,7 +53,7 @@ class ContainedButton extends StatelessWidget {
         side: BorderSide.none,
         splashFactory: splashFactory ?? InkSplash.splashFactory,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(borderRadius ?? 2),
+          borderRadius: BorderRadius.circular(borderRadius ?? 4),
         ),
         padding: padding ?? EdgeInsets.all(10),
         textStyle: TextStyle(fontSize: 15, fontWeight: FontWeight.w600),

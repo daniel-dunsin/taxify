@@ -18,7 +18,7 @@ final lightTheme = defaultTheme.copyWith(
     ),
   ),
   iconTheme: IconThemeData(color: AppColors.light),
-  scaffoldBackgroundColor: AppColors.light,
+  scaffoldBackgroundColor: const Color.fromARGB(255, 246, 246, 246),
   dialogTheme: defaultTheme.dialogTheme.copyWith(
     barrierColor: Color.fromRGBO(0, 0, 0, 0.4),
   ),

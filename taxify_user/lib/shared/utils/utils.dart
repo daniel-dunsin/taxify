@@ -5,6 +5,10 @@ ColorScheme getColorSchema(BuildContext context) {
   return Theme.of(context).colorScheme;
 }
 
+bool checkLightMode(BuildContext context) {
+  return getColorSchema(context).brightness == Brightness.light;
+}
+
 TextTheme getTextTheme(BuildContext context) {
   return Theme.of(context).textTheme;
 }

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:taxify_user/modules/auth/routes/auth_routes.dart';
 import 'package:taxify_user/modules/onboarding/widgets/onboarding_page_scroll.dart';
 import 'package:taxify_user/shared/constants/constants.dart';
 import 'package:taxify_user/shared/utils/utils.dart';
@@ -41,12 +43,17 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   width: double.maxFinite,
                   height: 55,
                   backgroundColor: AppColors.accent,
-                  onPressed: () {},
+                  onPressed: () {
+                    GoRouter.of(context).pushNamed(AuthRoutes.signIn);
+                  },
                   child: Text("Sign In"),
                 ),
                 SizedBox(height: 30),
                 ContainedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    GoRouter.of(context).pushNamed(AuthRoutes.signUp);
+                  },
+                  backgroundColor: getColorSchema(context).onPrimary,
                   width: double.maxFinite,
                   height: 55,
                   child: Text("Sign Up"),
