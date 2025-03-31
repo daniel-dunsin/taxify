@@ -44,7 +44,7 @@
     </queries>
 
 
-     <uses-feature
+    <uses-feature
         android:name="android.hardware.telephony"
         android:required="false" />
     <uses-feature
