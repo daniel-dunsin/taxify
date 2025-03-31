@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:taxify_user/modules/auth/routes/auth_routes.dart';
-import 'package:taxify_user/modules/onboarding/widgets/onboarding_page_scroll.dart';
+import 'package:taxify_user/presentation/auth/routes/auth_routes.dart';
+import 'package:taxify_user/presentation/onboarding/widgets/onboarding_page_scroll.dart';
 import 'package:taxify_user/shared/constants/constants.dart';
 import 'package:taxify_user/shared/utils/utils.dart';
 import 'package:taxify_user/shared/widgets/button.dart';

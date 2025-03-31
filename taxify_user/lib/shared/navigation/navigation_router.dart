@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:taxify_user/modules/auth/pages/login.dart';
-import 'package:taxify_user/modules/auth/pages/otp_verification.dart';
-import 'package:taxify_user/modules/auth/pages/sign_up.dart';
-import 'package:taxify_user/modules/auth/routes/auth_routes.dart';
-import 'package:taxify_user/modules/onboarding/pages/onboarding.dart';
-import 'package:taxify_user/modules/onboarding/pages/splash.dart';
-import 'package:taxify_user/modules/onboarding/routes/onboarding_routes.dart';
+import 'package:taxify_user/presentation/auth/pages/login.dart';
+import 'package:taxify_user/presentation/auth/pages/otp_verification.dart';
+import 'package:taxify_user/presentation/auth/pages/sign_up.dart';
+import 'package:taxify_user/presentation/auth/routes/auth_routes.dart';
+import 'package:taxify_user/presentation/onboarding/pages/onboarding.dart';
+import 'package:taxify_user/presentation/onboarding/pages/splash.dart';
+import 'package:taxify_user/presentation/onboarding/routes/onboarding_routes.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
@@ -45,9 +45,13 @@ final goRouter = GoRouter(
       path: AuthRoutes.otpVerification,
       name: AuthRoutes.otpVerification,
       pageBuilder: (context, state) {
-        final OtpReason otpReason = (state.extra as Map)["reason"];
+        final Map extra = state.extra as Map;
+        final OtpReason otpReason = extra["reason"];
+        final String email = extra["email"];
 
-        return MaterialPage(child: OtpVerificationPage(otpReason: otpReason));
+        return MaterialPage(
+          child: OtpVerificationPage(otpReason: otpReason, email: email),
+        );
       },
     ),
   ],

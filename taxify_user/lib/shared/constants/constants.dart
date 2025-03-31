@@ -28,3 +28,19 @@ class AppStyles {
     horizontal: 24,
   );
 }
+
+class AppMatchers {
+  static RegExp email = RegExp(
+    r"^[a-z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$",
+  );
+
+  static RegExp base64 = RegExp(r"/data:([a-zA-Z0-9]+\/[a-zA-Z0-9-.+]+)/");
+
+  static RegExp phoneNumber = RegExp(
+    r"^\+?[0-9]{1,4}?[-.\s]?\(?[0-9]{1,4}\)?[-.\s]?[0-9\s.-]{4,14}$",
+  );
+
+  static RegExp password = RegExp(
+    r'^(?=.*[A-Z])(?=.*[!@#$%^&*(),.?":{}|<>])(?=.{8,}).*$',
+  );
+}

@@ -14,6 +14,7 @@ class AppTextInput extends StatelessWidget {
   final Widget? icon;
   final Color? iconColor;
   final TextEditingController? controller;
+  final FormFieldValidator? validator;
   final TextInputType? keyboardType;
   final bool disabled;
   final bool loading;
@@ -30,6 +31,7 @@ class AppTextInput extends StatelessWidget {
     this.icon,
     this.iconColor,
     this.controller,
+    this.validator,
     this.keyboardType,
     this.disabled = false,
     this.loading = false,
@@ -52,6 +54,7 @@ class AppTextInput extends StatelessWidget {
               SizedBox(height: 10),
             ]),
         TextFormField(
+          validator: validator,
           controller: controller,
           cursorColor:
               getColorSchema(context).brightness == Brightness.light
@@ -102,7 +105,7 @@ class AppTextInput extends StatelessWidget {
               borderSide: BorderSide(width: 1.5, color: AppColors.error),
               borderRadius: BorderRadius.circular(6),
             ),
-            errorStyle: TextStyle(color: AppColors.error),
+            errorStyle: TextStyle(color: AppColors.error, fontSize: 12),
           ),
         ),
       ],

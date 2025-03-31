@@ -434,6 +434,7 @@ export const requestLoginOtp = async (body: RequestLoginOtpDto) => {
       success: true,
       data: {
         is_verified: false,
+        email: user.email,
       },
     };
   }

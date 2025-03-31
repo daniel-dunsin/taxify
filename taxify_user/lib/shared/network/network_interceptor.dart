@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:go_router/go_router.dart';
-import 'package:taxify_user/modules/onboarding/routes/onboarding_routes.dart';
+import 'package:taxify_user/presentation/onboarding/routes/onboarding_routes.dart';
 import 'package:taxify_user/shared/constants/constants.dart';
 import 'package:taxify_user/shared/navigation/navigation_router.dart';
 import 'package:taxify_user/shared/network/network_toast.dart';

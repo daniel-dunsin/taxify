@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:taxify_user/config/ioc.dart';
 import 'package:taxify_user/shared/navigation/navigation_router.dart';
 import 'package:taxify_user/shared/theme/dark_theme.dart';
 import 'package:taxify_user/shared/theme/light_theme.dart';
@@ -14,6 +15,8 @@ void main() async {
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
 
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+
+  initApp();
 
   runApp(const MyApp());
 }

@@ -5,7 +5,7 @@ import 'package:toastification/toastification.dart';
 
 class NetworkToast {
   static void handleError(dynamic error) {
-    debugPrint(error);
+    print(error);
     dynamic errorMessage = "Something went wrong";
 
     if (error?.runtimeType.toString() == "String") {
@@ -18,6 +18,7 @@ class NetworkToast {
           errorMessage = "Request Cancelled";
           break;
         case DioExceptionType.connectionError:
+        case DioExceptionType.unknown:
           errorMessage = "Network Error";
           break;
         case DioExceptionType.connectionTimeout:
@@ -26,7 +27,7 @@ class NetworkToast {
           errorMessage = "Request timeout";
           break;
         default:
-          errorMessage = error.response?.data?["error"] ?? errorMessage;
+          errorMessage = error.response?.data?["msg"] ?? errorMessage;
       }
     }
 
@@ -119,28 +120,3 @@ Widget _buildMessage({required String message, required bool isError}) {
     ),
   );
 }
-
-
-/**
- *  ListTile(
-            isThreeLine: true,
-            leading:,
-            title: Text(
-              isError ? "Something went wrong!" : "Success!",
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w400,
-                color: AppColors.dark,
-              ),
-            ),
-            subtitle: Text(
-              message,
-              style: TextStyle(
-                fontSize: 15,
-                fontWeight: FontWeight.w300,
-                color: AppColors.darkGray,
-              ),
-            ),
-          ),
-      
- */

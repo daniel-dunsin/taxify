@@ -24,14 +24,14 @@ export function errorHandler(
   if (error instanceof HttpError) {
     return res.status(error.statusCode).json({
       success: false,
-      message: error.message,
+      msg: error.message,
       name: error.name,
     });
   }
 
   return res.status(HttpStatusCode.InternalServerError).json({
     success: false,
-    message: error?.message || 'Oops! an error occured',
+    msg: error?.message || 'Oops! an error occured',
     name: 'InternalServerError',
     stackTrace: error.stack,
   });
