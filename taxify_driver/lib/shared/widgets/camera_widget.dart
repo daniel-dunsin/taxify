@@ -108,7 +108,6 @@ class _CameraScreenState extends State<CameraScreen>
 
   @override
   Widget build(BuildContext context) {
-    print("controller description ${controller?.description}");
     return Scaffold(
       appBar: AppBar(leading: AppBackButton(), toolbarHeight: 50),
       body: Padding(
