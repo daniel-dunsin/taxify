@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:taxify_driver/config/ioc.dart';
 import 'package:taxify_driver/data/auth/verify_otp_model.dart';
-import 'package:taxify_driver/presentation/auth/blocs/auth_bloc.dart';
+import 'package:taxify_driver/presentation/auth/blocs/auth_bloc/auth_bloc.dart';
 import 'package:taxify_driver/presentation/auth/routes/auth_routes.dart';
 import 'package:taxify_driver/shared/constants/constants.dart';
 import 'package:taxify_driver/shared/network/network_toast.dart';
