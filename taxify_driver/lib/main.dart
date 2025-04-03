@@ -50,7 +50,7 @@ class _MyAppState extends State<MyApp> {
             debugShowCheckedModeBanner: false,
             theme: lightTheme,
             darkTheme: darkTheme,
-            themeMode: ThemeMode.light,
+            themeMode: ThemeMode.dark,
             routerDelegate: goRouter.routerDelegate,
             routeInformationParser: goRouter.routeInformationParser,
             routeInformationProvider: goRouter.routeInformationProvider,

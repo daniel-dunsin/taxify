@@ -1,4 +1,5 @@
 import { VehicleType } from '../@types/enums';
+import vehicleCategoryModel from '../models/vehicle-category.model';
 
 export const getVehicleGroup = ({
   cateogryName,
@@ -63,4 +64,17 @@ export const getVehicleGroup = ({
   }
 
   return VehicleType.Economy;
+};
+
+export const getVehicleCategories = async () => {
+  const data = await vehicleCategoryModel
+    .find()
+    .sort({ name: 1 })
+    .select('_id name image');
+
+  return {
+    data,
+    success: true,
+    message: 'Vehicle categories fetched',
+  };
 };

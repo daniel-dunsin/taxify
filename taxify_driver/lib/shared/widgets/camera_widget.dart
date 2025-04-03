@@ -12,7 +12,6 @@ import 'package:taxify_driver/shared/utils/utils.dart';
 import 'package:taxify_driver/shared/widgets/back_button.dart';
 import 'package:taxify_driver/shared/widgets/button.dart';
 import 'package:taxify_driver/shared/widgets/dialog_loader.dart';
-import 'package:taxify_driver/shared/widgets/logo.dart';
 
 class CameraScreen extends StatefulWidget {
   final Function(File? image) onImageCapture;

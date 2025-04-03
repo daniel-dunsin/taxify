@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:taxify_driver/config/ioc.dart';
-import 'package:taxify_driver/shared/navigation/navigation_router.dart';
 import 'package:taxify_driver/shared/widgets/bouncing_loader.dart';
 
 class DialogLoader {

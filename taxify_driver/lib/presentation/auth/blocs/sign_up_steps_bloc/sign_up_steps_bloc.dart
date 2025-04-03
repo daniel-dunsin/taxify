@@ -6,7 +6,7 @@ import 'package:taxify_driver/data/auth/sign_up_steps.dart';
 part 'sign_up_steps_events.dart';
 
 class SignUpStepsBloc extends Bloc<SignUpStepsEvents, SignUpSteps> {
-  SignUpStepsBloc() : super(SignUpSteps(step: 1, signUpModel: SignUpModel())) {
+  SignUpStepsBloc() : super(SignUpSteps(step: 3, signUpModel: SignUpModel())) {
     on<IncreaseSignUpSteps>((event, emit) {
       emit(state.copyWith(step: state.step == 5 ? 5 : state.step + 1));
     });

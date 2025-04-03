@@ -1,6 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:taxify_driver/shared/constants/constants.dart';
+import 'package:taxify_driver/shared/navigation/navigation_router.dart';
+import 'package:taxify_driver/shared/utils/utils.dart';
 import 'package:toastification/toastification.dart';
 
 class NetworkToast {
@@ -97,7 +99,10 @@ Widget _buildMessage({required String message, required bool isError}) {
                     style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.bold,
-                      color: Colors.black,
+                      color:
+                          getColorSchema(
+                            navigatorKey.currentContext!,
+                          ).onPrimary,
                     ),
                   ),
                   const SizedBox(height: 5),
@@ -106,7 +111,10 @@ Widget _buildMessage({required String message, required bool isError}) {
                     style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.normal,
-                      color: Colors.black,
+                      color:
+                          getColorSchema(
+                            navigatorKey.currentContext!,
+                          ).onPrimary,
                     ),
                     maxLines: 3,
                     overflow: TextOverflow.ellipsis,

@@ -3,6 +3,7 @@ class VehicleCategoryModel {
   final String name;
   final String? image;
   final String? mapImage;
+
   VehicleCategoryModel({
     required this.id,
     required this.name,

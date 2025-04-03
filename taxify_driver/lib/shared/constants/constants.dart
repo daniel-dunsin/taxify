@@ -16,6 +16,7 @@ class AppFonts {
 
 class AppConstants {
   static const serverBaseUrl = "http://localhost:3001/api/v1";
+  static const nhtsaServerBaseUrl = "https://vpic.nhtsa.dot.gov/api/vehicles";
 }
 
 class AppStorageConstants {
