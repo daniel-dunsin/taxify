@@ -16,11 +16,13 @@ class NetworkToast {
 
     if (error is DioException) {
       switch (error.type) {
+        case DioExceptionType.unknown:
+          errorMessage = "Something went wrong";
+          break;
         case DioExceptionType.cancel:
           errorMessage = "Request Cancelled";
           break;
         case DioExceptionType.connectionError:
-        case DioExceptionType.unknown:
           errorMessage = "Network Error";
           break;
         case DioExceptionType.connectionTimeout:

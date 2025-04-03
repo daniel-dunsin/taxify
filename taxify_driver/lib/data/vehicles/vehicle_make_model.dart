@@ -14,8 +14,8 @@ class VehicleMakeModel {
 
   factory VehicleMakeModel.fromMap(Map<String, dynamic> map) {
     return VehicleMakeModel(
-      id: map['Make_ID'] as int,
-      name: map['Make_Name'] as String,
+      id: map['MakeId'] as int,
+      name: map['MakeName'] as String,
     );
   }
 }

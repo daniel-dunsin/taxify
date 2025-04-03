@@ -28,6 +28,8 @@ class AppStyles {
     vertical: 20,
     horizontal: 24,
   );
+  static Color shimmerBaseColor = Color.fromRGBO(129, 129, 129, 0.498);
+  static Color shipmmerHighlightColor = Color.fromRGBO(164, 164, 164, 1);
 }
 
 class AppMatchers {

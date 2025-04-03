@@ -27,3 +27,23 @@ class VerifyLoginOtpRequested extends AuthEvents {
 
   VerifyLoginOtpRequested(this.verifyOtpModel);
 }
+
+class GetVehicleCategoriesRequested extends AuthEvents {}
+
+class GetVehicleMakesRequested extends AuthEvents {
+  final String vehicleType;
+
+  GetVehicleMakesRequested({required this.vehicleType});
+}
+
+class GetVehicleModelsRequested extends AuthEvents {
+  final int? vehicleYear;
+  final String vehicleType;
+  final String vehicleMake;
+
+  GetVehicleModelsRequested({
+    required this.vehicleYear,
+    required this.vehicleType,
+    required this.vehicleMake,
+  });
+}

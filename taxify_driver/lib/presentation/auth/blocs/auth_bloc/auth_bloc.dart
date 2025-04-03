@@ -2,7 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:taxify_driver/data/auth/sign_up_model.dart';
 import 'package:taxify_driver/data/auth/verify_otp_model.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:taxify_driver/data/vehicles/nhtsa_vehicle_model.dart';
+import 'package:taxify_driver/data/vehicles/vehicle_category_model.dart';
+import 'package:taxify_driver/data/vehicles/vehicle_make_model.dart';
 import 'package:taxify_driver/domain/auth/auth_repository.dart';
+import 'package:taxify_driver/domain/vehicle/vehicle_repository.dart';
 import 'package:taxify_driver/shared/network/network_toast.dart';
 
 part 'auth_events.dart';
@@ -10,8 +14,10 @@ part 'auth_state.dart';
 
 class AuthBloc extends Bloc<AuthEvents, AuthState> {
   final AuthRepository authRepository;
+  final VehicleRepository vehicleRepository;
 
-  AuthBloc({required this.authRepository}) : super(AuthInitialState()) {
+  AuthBloc({required this.authRepository, required this.vehicleRepository})
+    : super(AuthInitialState()) {
     on<SignUpRequested>((event, emit) async {
       emit(SignUpLoading());
 
@@ -66,6 +72,64 @@ class AuthBloc extends Bloc<AuthEvents, AuthState> {
       } catch (e) {
         NetworkToast.handleError(e);
         emit(VerifyOtpFailed());
+      }
+    });
+
+    on<GetVehicleCategoriesRequested>((event, emit) async {
+      emit(GetVehicleCategoriesLoading());
+      try {
+        final response = await vehicleRepository.getVehicleCategories();
+
+        final data = response["data"] as List<dynamic>;
+
+        final vehiclesCategories = List<VehicleCategoryModel>.from(
+          data.map((d) => VehicleCategoryModel.fromMap(d)),
+        );
+
+        emit(GetVehicleCategoriesSuccess(vehiclesCategories));
+      } catch (e) {
+        NetworkToast.handleError(e);
+        emit(GetVehicleCategoriesFailed());
+      }
+    });
+
+    on<GetVehicleMakesRequested>((event, emit) async {
+      emit(GetVehicleMakesLoading());
+
+      try {
+        final response = await vehicleRepository.getVehicleMakes(
+          event.vehicleType,
+        );
+
+        final vehicleMakes = List<VehicleMakeModel>.from(
+          response.map((d) => VehicleMakeModel.fromMap(d)),
+        );
+
+        emit(GetVehicleMakesSuccess(vehicleMakes));
+      } catch (e) {
+        NetworkToast.handleError(e);
+        emit(GetVehicleMakesFailed());
+      }
+    });
+
+    on<GetVehicleModelsRequested>((event, emit) async {
+      emit(GetVehicleModelsLoading());
+
+      try {
+        final response = await vehicleRepository.getVehicleModels(
+          vehicleMake: event.vehicleMake,
+          vehicleType: event.vehicleType,
+          year: event.vehicleYear,
+        );
+
+        final vehicleModels = List<NHTSAVehicleModel>.from(
+          response.map((d) => NHTSAVehicleModel.fromMap(d)),
+        );
+
+        emit(GetVehicleModelsSuccess(vehicleModels));
+      } catch (e) {
+        NetworkToast.handleError(e);
+        emit(GetVehicleModelsFailed());
       }
     });
   }

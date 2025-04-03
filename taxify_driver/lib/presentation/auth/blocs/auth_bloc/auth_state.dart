@@ -28,3 +28,33 @@ class VerifyOtpLoading extends AuthState {}
 class VerifyOtpSuccess extends AuthState {}
 
 class VerifyOtpFailed extends AuthState {}
+
+class GetVehicleCategoriesLoading extends AuthState {}
+
+class GetVehicleCategoriesSuccess extends AuthState {
+  final List<VehicleCategoryModel> data;
+
+  GetVehicleCategoriesSuccess(this.data);
+}
+
+class GetVehicleCategoriesFailed extends AuthState {}
+
+class GetVehicleMakesLoading extends AuthState {}
+
+class GetVehicleMakesSuccess extends AuthState {
+  final List<VehicleMakeModel> data;
+
+  GetVehicleMakesSuccess(this.data);
+}
+
+class GetVehicleMakesFailed extends AuthState {}
+
+class GetVehicleModelsLoading extends AuthState {}
+
+class GetVehicleModelsSuccess extends AuthState {
+  final List<NHTSAVehicleModel> data;
+
+  GetVehicleModelsSuccess(this.data);
+}
+
+class GetVehicleModelsFailed extends AuthState {}

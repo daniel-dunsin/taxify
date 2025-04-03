@@ -11,7 +11,7 @@ class VehicleCategoryModel {
     this.mapImage,
   });
 
-  factory VehicleCategoryModel.fromMap(Map<String, dynamic> map) {
+  factory VehicleCategoryModel.fromMap(Map map) {
     return VehicleCategoryModel(
       id: map['_id'] as String,
       name: map['name'] as String,
