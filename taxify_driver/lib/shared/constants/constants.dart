@@ -47,3 +47,14 @@ class AppMatchers {
     r'^(?=.*[A-Z])(?=.*[!@#$%^&*(),.?":{}|<>])(?=.{8,}).*$',
   );
 }
+
+const appVehicleRules = <String>[
+  "Max, 2 in the back",
+  "No food consumption in car",
+  "No smoking/drinking in the car",
+  "Seatbelts must be worn at all times",
+  "No loud music or phone calls",
+  "Treat the vehicle with respect",
+  "Keep feet off the seats",
+  "Children must be accompanied by an adult",
+];

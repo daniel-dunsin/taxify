@@ -36,7 +36,7 @@ class FileUploader extends StatelessWidget {
                 label!,
                 style: getTextTheme(
                   context,
-                ).labelMedium?.copyWith(fontWeight: FontWeight.w600),
+                ).bodyMedium?.copyWith(fontWeight: FontWeight.w600),
               ),
               SizedBox(height: 10),
             ]

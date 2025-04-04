@@ -30,3 +30,7 @@ Future<bool> grantPermission(Permission permission) async {
 
   return false;
 }
+
+String colorToHex(Color color) {
+  return '#${color.value.toRadixString(16).padLeft(8, '0').toUpperCase()}';
+}

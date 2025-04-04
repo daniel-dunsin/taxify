@@ -49,7 +49,7 @@ class AppTextInput extends StatelessWidget {
                 labelText!,
                 style: getTextTheme(
                   context,
-                ).labelMedium?.copyWith(fontWeight: FontWeight.w600),
+                ).bodyMedium?.copyWith(fontWeight: FontWeight.w600),
               ),
               SizedBox(height: 10),
             ]),

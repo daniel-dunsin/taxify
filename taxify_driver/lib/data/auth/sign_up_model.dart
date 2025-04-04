@@ -1,6 +1,8 @@
 import 'dart:io';
+import 'package:flutter/widgets.dart';
 import 'package:taxify_driver/data/vehicles/vehicle_category_model.dart';
 import 'package:taxify_driver/shared/utils/file_utils.dart';
+import 'package:taxify_driver/shared/utils/utils.dart';
 
 class SignUpModel {
   final String? email;
@@ -21,7 +23,7 @@ class SignUpModel {
   final int? vehiclePassengersCount;
   final File? vehicleRegistrationCertificate;
   final DateTime? vehicleRegistrationDate;
-  final String? vehicleColor;
+  final Color? vehicleColor;
   final List<String> vehicleRules;
   final String? accountNumber;
   final String? accountName;
@@ -81,7 +83,7 @@ class SignUpModel {
         vehicleRegistrationCertificate!,
       ),
       'vehicle_registration_date': vehicleRegistrationDate?.toIso8601String(),
-      'vehicle_color': vehicleColor,
+      'vehicle_color': vehicleColor == null ? null : colorToHex(vehicleColor!),
       'vehicle_rules': vehicleRules,
       'account_number': accountNumber,
       'account_name': accountName,
@@ -109,7 +111,7 @@ class SignUpModel {
     int? vehiclePassengersCount,
     File? vehicleRegistrationCertificate,
     DateTime? vehicleRegistrationDate,
-    String? vehicleColor,
+    Color? vehicleColor,
     List<String>? vehicleRules,
     String? accountNumber,
     String? accountName,

@@ -18,7 +18,6 @@ class SignUpStep3 extends StatefulWidget {
 }
 
 class _SignUpStep3State extends State<SignUpStep3> {
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   late TextEditingController ninNumberController;
   File? birthCertificate;
   File? nin;
@@ -64,6 +63,12 @@ class _SignUpStep3State extends State<SignUpStep3> {
     );
 
     getIt.get<SignUpStepsBloc>().add(IncreaseSignUpSteps());
+  }
+
+  @override
+  void dispose() {
+    ninNumberController.dispose();
+    super.dispose();
   }
 
   @override
