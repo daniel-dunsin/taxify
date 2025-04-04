@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 class AppColors {
@@ -15,7 +17,12 @@ class AppFonts {
 }
 
 class AppConstants {
-  static const serverBaseUrl = "http://localhost:3001/api/v1";
+  static String get serverBaseUrl {
+    return Platform.isAndroid
+        ? "http://10.0.2.2:3001/api/v1"
+        : "http://localhost:3001/api/v1";
+  }
+
   static const nhtsaServerBaseUrl = "https://vpic.nhtsa.dot.gov/api/vehicles";
 }
 

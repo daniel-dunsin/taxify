@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:taxify_driver/config/ioc.dart';
 import 'package:taxify_driver/data/auth/sign_up_model.dart';
 import 'package:taxify_driver/data/auth/verify_otp_model.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -6,7 +7,10 @@ import 'package:taxify_driver/data/vehicles/nhtsa_vehicle_model.dart';
 import 'package:taxify_driver/data/vehicles/vehicle_category_model.dart';
 import 'package:taxify_driver/data/vehicles/vehicle_make_model.dart';
 import 'package:taxify_driver/domain/auth/auth_repository.dart';
+import 'package:taxify_driver/data/payment/bank_model.dart';
+import 'package:taxify_driver/domain/payment/payment_repository.dart';
 import 'package:taxify_driver/domain/vehicle/vehicle_repository.dart';
+import 'package:taxify_driver/presentation/auth/blocs/sign_up_steps_bloc/sign_up_steps_bloc.dart';
 import 'package:taxify_driver/shared/network/network_toast.dart';
 
 part 'auth_events.dart';
@@ -15,14 +19,20 @@ part 'auth_state.dart';
 class AuthBloc extends Bloc<AuthEvents, AuthState> {
   final AuthRepository authRepository;
   final VehicleRepository vehicleRepository;
+  final PaymentRepository paymentRepository;
 
-  AuthBloc({required this.authRepository, required this.vehicleRepository})
-    : super(AuthInitialState()) {
+  AuthBloc({
+    required this.authRepository,
+    required this.vehicleRepository,
+    required this.paymentRepository,
+  }) : super(AuthInitialState()) {
     on<SignUpRequested>((event, emit) async {
       emit(SignUpLoading());
 
       try {
-        await authRepository.signUp(event.signUpModel);
+        final signUpData = getIt.get<SignUpStepsBloc>().state.signUpModel;
+
+        await authRepository.signUp(signUpData);
 
         emit(SignUpSuccess());
       } catch (e) {
@@ -130,6 +140,45 @@ class AuthBloc extends Bloc<AuthEvents, AuthState> {
       } catch (e) {
         NetworkToast.handleError(e);
         emit(GetVehicleModelsFailed());
+      }
+    });
+
+    on<GetBanksRequested>((event, emit) async {
+      emit(GetBanksLoading());
+      try {
+        final response = await paymentRepository.getBanks();
+
+        final banks = List<BankModel>.from(
+          response["data"]?.map((d) => BankModel.fromMap(d)),
+        );
+
+        emit(GetBanksSuccess(banks));
+      } catch (e) {
+        NetworkToast.handleError(e);
+        emit(GetBanksFailed());
+      }
+    });
+
+    on<ResolveAccountRequested>((event, emit) async {
+      emit(ResolveAccountLoading());
+
+      try {
+        final response = await paymentRepository.resolveAccount(
+          bankCode: event.bankCode,
+          accountNumber: event.accountNumber,
+        );
+
+        final data = response["data"] as Map;
+
+        emit(
+          ResolveAccountSuccess(
+            accountNumber: data["account_number"],
+            accountName: data["account_name"],
+          ),
+        );
+      } catch (e) {
+        NetworkToast.handleError(e);
+        emit(ResolveAccountFailed());
       }
     });
   }

@@ -62,6 +62,7 @@ class _VehicleMakesBottomSheetState extends State<VehicleMakesBottomSheet> {
             hintText: "Search vehicle makes",
             suffixIcon: Icon(Icons.search_outlined),
             controller: _searchController,
+            fillColor: checkLightMode(context) ? Colors.grey[200] : null,
           ),
 
           SizedBox(height: 20),

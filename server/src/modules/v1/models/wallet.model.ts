@@ -16,6 +16,9 @@ const WalletSchema = createSchema<Wallet>({
   bank_code: {
     type: String,
   },
+  bank_logo: {
+    type: String,
+  },
   balance: {
     type: Number,
     default: 0,

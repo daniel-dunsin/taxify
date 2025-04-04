@@ -11,9 +11,7 @@ class RequestLoginOtpRequested extends AuthEvents {
 }
 
 class SignUpRequested extends AuthEvents {
-  final SignUpModel signUpModel;
-
-  SignUpRequested(this.signUpModel);
+  SignUpRequested();
 }
 
 class VerifySignUpOtpRequested extends AuthEvents {
@@ -45,5 +43,19 @@ class GetVehicleModelsRequested extends AuthEvents {
     required this.vehicleYear,
     required this.vehicleType,
     required this.vehicleMake,
+  });
+}
+
+class GetBanksRequested extends AuthEvents {
+  GetBanksRequested();
+}
+
+class ResolveAccountRequested extends AuthEvents {
+  final String accountNumber;
+  final String bankCode;
+
+  ResolveAccountRequested({
+    required this.accountNumber,
+    required this.bankCode,
   });
 }

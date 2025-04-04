@@ -66,28 +66,41 @@ class AppTextInputDecorator extends StatelessWidget {
           child: InputDecorator(
             decoration: InputDecoration(
               enabled: !disabled && !loading,
-              suffixIcon: GestureDetector(
-                onTap:
-                    disabled
-                        ? null
-                        : () {
-                          if (value != null) {
-                            onCancel?.call();
-                          } else {
-                            onClick?.call();
-                          }
-                        },
-                child: Icon(
-                  value == null || disabled ? Icons.chevron_right : Icons.close,
-                  color: getColorSchema(context).onPrimary,
-                ),
-              ),
+              suffixIcon:
+                  suffixIcon ??
+                  GestureDetector(
+                    onTap:
+                        disabled
+                            ? null
+                            : () {
+                              if (value != null) {
+                                onCancel?.call();
+                              } else {
+                                onClick?.call();
+                              }
+                            },
+                    child: Icon(
+                      value == null || disabled
+                          ? Icons.chevron_right
+                          : Icons.close,
+                      color: getColorSchema(context).onPrimary,
+                    ),
+                  ),
 
               suffixIconColor:
                   sufficIconColor ?? getColorSchema(context).onPrimary,
               icon: icon,
               iconColor: iconColor,
-              prefixIcon: prefixIcon,
+              prefixIcon:
+                  prefixIcon != null
+                      ? Container(
+                        padding: EdgeInsets.symmetric(
+                          vertical: 6,
+                          horizontal: 6,
+                        ),
+                        child: prefixIcon,
+                      )
+                      : null,
               prefixIconColor: prefixIconColor,
               filled: true,
               fillColor:

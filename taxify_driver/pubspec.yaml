@@ -32,6 +32,7 @@ dependencies:
   cached_network_image: ^3.4.1
   intl: ^0.20.2
   flex_color_picker: ^3.7.0
+  mime: ^2.0.0
 
 dev_dependencies:
   flutter_test:

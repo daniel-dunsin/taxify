@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:taxify_driver/data/auth/sign_up_model.dart';
 import 'package:taxify_driver/data/auth/verify_otp_model.dart';
 import 'package:taxify_driver/shared/network/network_service.dart';
@@ -9,8 +11,8 @@ class AuthRepository {
 
   signUp(SignUpModel signUpModel) async {
     final response = await networkService.post(
-      "/auth/sign-up/user",
-      data: signUpModel.toMap(),
+      "/auth/sign-up/driver",
+      data: await signUpModel.toMap(),
     );
 
     return response.data;

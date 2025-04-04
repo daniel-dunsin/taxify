@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:taxify_driver/shared/constants/constants.dart';
 import 'package:taxify_driver/shared/utils/utils.dart';
 
@@ -13,9 +14,11 @@ class AppTextInput extends StatelessWidget {
   final Color? prefixIconColor;
   final Widget? icon;
   final Color? iconColor;
+  final Color? fillColor;
   final TextEditingController? controller;
   final FormFieldValidator? validator;
   final TextInputType? keyboardType;
+  final int? maxLength;
   final bool disabled;
   final bool loading;
 
@@ -30,9 +33,11 @@ class AppTextInput extends StatelessWidget {
     this.prefixIconColor,
     this.icon,
     this.iconColor,
+    this.fillColor,
     this.controller,
     this.validator,
     this.keyboardType,
+    this.maxLength,
     this.disabled = false,
     this.loading = false,
   });
@@ -63,6 +68,17 @@ class AppTextInput extends StatelessWidget {
           showCursor: true,
           keyboardType: keyboardType,
           style: TextStyle(fontWeight: FontWeight.w500),
+          maxLengthEnforcement:
+              MaxLengthEnforcement.truncateAfterCompositionEnds,
+          maxLength: maxLength,
+          buildCounter: (
+            context, {
+            required int currentLength,
+            required bool isFocused,
+            required int? maxLength,
+          }) {
+            return null;
+          },
           decoration: InputDecoration(
             enabled: !disabled && !loading,
             hintText: hintText,
@@ -76,9 +92,10 @@ class AppTextInput extends StatelessWidget {
             prefixIconColor: prefixIconColor,
             filled: true,
             fillColor:
-                checkLightMode(context)
+                fillColor ??
+                (checkLightMode(context)
                     ? getColorSchema(context).primary
-                    : AppColors.darkGray,
+                    : AppColors.darkGray),
             border: OutlineInputBorder(
               borderSide: BorderSide(width: 1.5, color: Colors.transparent),
               borderRadius: BorderRadius.circular(6),

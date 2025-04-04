@@ -22,6 +22,7 @@ export type BankDetails = {
   account_name: string;
   bank_code: string;
   bank_name: string;
+  bank_logo: string;
 };
 
 export interface Auth extends DbMixins {

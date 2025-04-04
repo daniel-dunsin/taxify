@@ -1,3 +1,4 @@
+import axios from 'axios';
 import { paystackHttpInstance } from '../../../configs/axios';
 import Logger from '../../../configs/logger';
 import { HttpStatusCode } from '../../../utils/constants';
@@ -8,16 +9,12 @@ const logger = new Logger('PaymentService');
 
 export const getBanks = async () => {
   try {
-    const response = await paystackHttpInstance.get('/bank');
-
-    if (!response.data.status) {
-      throw new Error(response.data.message);
-    }
+    const response = await axios.get('https://nigerianbanks.xyz/');
 
     return {
       success: true,
       msg: 'Banks retrieved successfully',
-      data: response.data.data,
+      data: response.data,
     };
   } catch (error) {
     logger.error(`Error getting banks: ${JSON.stringify(error)}`);

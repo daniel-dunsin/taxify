@@ -58,3 +58,27 @@ class GetVehicleModelsSuccess extends AuthState {
 }
 
 class GetVehicleModelsFailed extends AuthState {}
+
+class GetBanksLoading extends AuthState {}
+
+class GetBanksSuccess extends AuthState {
+  final List<BankModel> data;
+
+  GetBanksSuccess(this.data);
+}
+
+class GetBanksFailed extends AuthState {}
+
+class ResolveAccountLoading extends AuthState {}
+
+class ResolveAccountSuccess extends AuthState {
+  final String accountNumber;
+  final String accountName;
+
+  ResolveAccountSuccess({
+    required this.accountNumber,
+    required this.accountName,
+  });
+}
+
+class ResolveAccountFailed extends AuthState {}

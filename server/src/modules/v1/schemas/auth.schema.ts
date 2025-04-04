@@ -33,12 +33,13 @@ export const driverSignUpSchema = Joi.object({
     vehicle_passengers_count: Joi.number().required().min(1),
     vehicle_registration_certificate: Joi.string().required(),
     vehicle_registration_date: Joi.date().strict(false),
-    vehicle_color: Joi.string().required(),
+    vehicle_color: Joi.string().optional(),
     vehicle_rules: Joi.array().items(Joi.string()).default([]),
     account_number: Joi.string().required(),
     account_name: Joi.string().required(),
     bank_name: Joi.string().required(),
     bank_code: Joi.string().required(),
+    bank_logo: Joi.string().optional(),
   }),
 });
 

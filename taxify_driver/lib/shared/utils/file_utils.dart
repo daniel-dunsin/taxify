@@ -3,13 +3,17 @@ import 'dart:io';
 
 import 'package:image_picker/image_picker.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:mime/mime.dart';
 
 class FileUtils {
   static Future<String> convertImageToBase64(File file) async {
     List<int> imageBytes = await file.readAsBytes();
     String base64String = base64Encode(imageBytes);
 
-    return base64String;
+    String mimeType =
+        MimeTypeResolver().lookup(file.path) ?? 'image/png'; // Default to PNG
+
+    return 'data:$mimeType;base64,$base64String';
   }
 
   static Future<File?> pickImage(ImageSource imageSource) async {
@@ -28,7 +32,7 @@ class FileUtils {
       allowMultiple: false,
     );
 
-    if (pickedFile?.files[0] != null) return null;
+    if (pickedFile?.files[0] == null) return null;
 
     return File(pickedFile?.files[0].path as String);
   }

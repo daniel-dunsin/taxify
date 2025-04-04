@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/widgets.dart';
+import 'package:taxify_driver/data/payment/bank_model.dart';
 import 'package:taxify_driver/data/vehicles/vehicle_category_model.dart';
 import 'package:taxify_driver/shared/utils/file_utils.dart';
 import 'package:taxify_driver/shared/utils/utils.dart';
@@ -27,8 +28,7 @@ class SignUpModel {
   final List<String> vehicleRules;
   final String? accountNumber;
   final String? accountName;
-  final String? bankName;
-  final String? bankCode;
+  final BankModel? bank;
 
   SignUpModel({
     this.email,
@@ -53,24 +53,25 @@ class SignUpModel {
     this.vehicleRules = const [],
     this.accountNumber,
     this.accountName,
-    this.bankName,
-    this.bankCode,
+    this.bank,
   });
 
-  Map<String, dynamic> toMap() {
+  Future<Map<String, dynamic>> toMap() async {
     return <String, dynamic>{
       'email': email,
       'firstName': firstName,
       'lastName': lastName,
       'phoneNumber': phoneNumber,
-      'profilePicture': FileUtils.convertImageToBase64(profilePicture!),
+      'profilePicture': await FileUtils.convertImageToBase64(profilePicture!),
       'nin_number': ninNumber,
-      'nin': FileUtils.convertImageToBase64(nin!),
-      'birth_certificate': FileUtils.convertImageToBase64(birthCertificate!),
-      'drivers_license_front_image': FileUtils.convertImageToBase64(
+      'nin': await FileUtils.convertImageToBase64(nin!),
+      'birth_certificate': await FileUtils.convertImageToBase64(
+        birthCertificate!,
+      ),
+      'drivers_license_front_image': await FileUtils.convertImageToBase64(
         driversLicenseFrontImage!,
       ),
-      'drivers_license_back_image': FileUtils.convertImageToBase64(
+      'drivers_license_back_image': await FileUtils.convertImageToBase64(
         driversLicenseBackImage!,
       ),
       'vehicle_category_id': vehicleCategory?.id,
@@ -79,7 +80,7 @@ class SignUpModel {
       'vehicle_year': vehicleYear,
       'vehicle_plate_number': vehiclePlateNumber,
       'vehicle_passengers_count': vehiclePassengersCount,
-      'vehicle_registration_certificate': FileUtils.convertImageToBase64(
+      'vehicle_registration_certificate': await FileUtils.convertImageToBase64(
         vehicleRegistrationCertificate!,
       ),
       'vehicle_registration_date': vehicleRegistrationDate?.toIso8601String(),
@@ -87,8 +88,9 @@ class SignUpModel {
       'vehicle_rules': vehicleRules,
       'account_number': accountNumber,
       'account_name': accountName,
-      'bank_name': bankName,
-      'bank_code': bankCode,
+      'bank_name': bank?.name,
+      'bank_code': bank?.code,
+      "bank_logo": bank?.logo,
     };
   }
 
@@ -115,8 +117,7 @@ class SignUpModel {
     List<String>? vehicleRules,
     String? accountNumber,
     String? accountName,
-    String? bankName,
-    String? bankCode,
+    BankModel? bank,
     bool enforceNullFile = false,
   }) {
     return SignUpModel(
@@ -160,8 +161,12 @@ class SignUpModel {
       vehicleRules: vehicleRules ?? this.vehicleRules,
       accountNumber: accountNumber ?? this.accountNumber,
       accountName: accountName ?? this.accountName,
-      bankName: bankName ?? this.bankName,
-      bankCode: bankCode ?? this.bankCode,
+      bank: bank,
     );
+  }
+
+  @override
+  String toString() {
+    return 'SignUpModel(email: $email, firstName: $firstName, lastName: $lastName, phoneNumber: $phoneNumber, profilePicture: $profilePicture, ninNumber: $ninNumber, nin: $nin, birthCertificate: $birthCertificate, driversLicenseFrontImage: $driversLicenseFrontImage, driversLicenseBackImage: $driversLicenseBackImage, vehicleCategory: $vehicleCategory, vehicleMake: $vehicleMake, vehicleModel: $vehicleModel, vehicleYear: $vehicleYear, vehiclePlateNumber: $vehiclePlateNumber, vehiclePassengersCount: $vehiclePassengersCount, vehicleRegistrationCertificate: $vehicleRegistrationCertificate, vehicleRegistrationDate: $vehicleRegistrationDate, vehicleColor: $vehicleColor, vehicleRules: $vehicleRules, accountNumber: $accountNumber, accountName: $accountName, bank: $bank)';
   }
 }

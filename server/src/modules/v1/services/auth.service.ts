@@ -156,6 +156,7 @@ export const signUpDriver = async (body: DriverSignUpDto) => {
     account_number,
     bank_code,
     bank_name,
+    bank_logo,
   } = body!;
 
   const formattedPhoneNumber = formatCountryPhoneNumber(phoneNumber);
@@ -202,6 +203,7 @@ export const signUpDriver = async (body: DriverSignUpDto) => {
     account_number,
     bank_code,
     bank_name,
+    bank_logo,
   });
 
   const vehicleCategory = await vehicleCategoryModel.findById(
