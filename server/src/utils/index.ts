@@ -42,6 +42,8 @@ export function asyncHandler(
 ) {
   return async (req: Request, res: Response, next: NextFunction) => {
     try {
+      const logger = new Logger('app');
+
       const response = await callback(req, res, next);
 
       let statusCode = 200;
@@ -54,7 +56,11 @@ export function asyncHandler(
           statusCode = 200;
       }
 
-      res.status(201).json(
+      logger.log(
+        `${statusCode}: Request to ${req.path} completed successfully\n`
+      );
+
+      res.status(statusCode).json(
         response ?? {
           msg: 'successful',
           success: true,
