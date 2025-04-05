@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose, { MongooseQueryOrDocumentMiddleware } from 'mongoose';
 import { Vehicle } from '../@types/db';
 import { createSchema } from '../../../utils';
 import { DBCollections } from '../../../utils/constants';
@@ -48,6 +48,18 @@ const VehicleSchema = createSchema<Vehicle>({
     default: true,
   },
 });
+
+const restrictedOperations: MongooseQueryOrDocumentMiddleware[] = [
+  'deleteMany',
+  'deleteOne',
+  'findOneAndDelete',
+];
+
+restrictedOperations.forEach((op) =>
+  VehicleSchema.pre(op, function (next) {
+    next(new Error('Operation not allowed on this schema'));
+  })
+);
 
 const vehicleModel = mongoose.model(DBCollections.Vehicle, VehicleSchema);
 

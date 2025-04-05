@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose, { MongooseQueryOrDocumentMiddleware } from 'mongoose';
 import { Driver } from '../@types/db';
 import { DriverStatus } from '../@types/enums';
 import { createSchema } from '../../../utils';
@@ -26,6 +26,18 @@ const DriverSchema = createSchema<Driver>({
     default: DriverStatus.ACTIVE,
   },
 });
+
+const restrictedOperations: MongooseQueryOrDocumentMiddleware[] = [
+  'deleteMany',
+  'deleteOne',
+  'findOneAndDelete',
+];
+
+restrictedOperations.forEach((op) =>
+  DriverSchema.pre(op, function (next) {
+    next(new Error('Operation not allowed on this schema'));
+  })
+);
 
 const driverModel = mongoose.model(DBCollections.Driver, DriverSchema);
 export default driverModel;

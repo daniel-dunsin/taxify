@@ -26,3 +26,8 @@ export enum DriverStatus {
   ACTIVE = 'ACTIVE',
   INACTIVE = 'INACTIVE',
 }
+
+export enum PresetAddresses {
+  Home = 'home',
+  Work = 'work',
+}

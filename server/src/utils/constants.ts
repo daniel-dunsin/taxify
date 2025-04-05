@@ -87,6 +87,7 @@ export enum DBCollections {
   VehicleGroup = 'vehicle_group',
   VehicleCategory = 'vehicle_category',
   Wallet = 'wallet',
+  Address = 'address',
 }
 
 export const Images = {

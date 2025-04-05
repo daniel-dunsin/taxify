@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose, { MongooseQueryOrDocumentMiddleware } from 'mongoose';
 import { createSchema } from '../../../utils';
 import { DBCollections } from '../../../utils/constants';
 import { Wallet } from '../@types/db';
@@ -40,6 +40,18 @@ const WalletSchema = createSchema<Wallet>({
     default: '₦',
   },
 });
+
+const restrictedOperations: MongooseQueryOrDocumentMiddleware[] = [
+  'deleteMany',
+  'deleteOne',
+  'findOneAndDelete',
+];
+
+restrictedOperations.forEach((op) =>
+  WalletSchema.pre(op, function (next) {
+    next(new Error('Operation not allowed on this schema'));
+  })
+);
 
 const walletModel = mongoose.model(DBCollections.Wallet, WalletSchema);
 

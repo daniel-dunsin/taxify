@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose, { MongooseQueryOrDocumentMiddleware } from 'mongoose';
 import { VerificationDocument } from '../@types/db';
 import { createSchema } from '../../../utils';
 import { DBCollections } from '../../../utils/constants';
@@ -38,6 +38,18 @@ const VerificationDocumentSchema = createSchema<VerificationDocument>({
     default: false,
   },
 });
+
+const restrictedOperations: MongooseQueryOrDocumentMiddleware[] = [
+  'deleteMany',
+  'deleteOne',
+  'findOneAndDelete',
+];
+
+restrictedOperations.forEach((op) =>
+  VerificationDocumentSchema.pre(op, function (next) {
+    next(new Error('Operation not allowed on this schema'));
+  })
+);
 
 const verificationDocumentModel = mongoose.model(
   DBCollections.VerificationDocument,

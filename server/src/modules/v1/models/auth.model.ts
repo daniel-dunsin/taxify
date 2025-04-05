@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose, { MongooseQueryOrDocumentMiddleware } from 'mongoose';
 import { Auth } from '../@types/db';
 import { createSchema } from '../../../utils';
 import { DBCollections } from '../../../utils/constants';
@@ -23,6 +23,18 @@ const AuthSchema = createSchema<Auth>({
     type: Date,
   },
 });
+
+const restrictedOperations: MongooseQueryOrDocumentMiddleware[] = [
+  'deleteMany',
+  'deleteOne',
+  'findOneAndDelete',
+];
+
+restrictedOperations.forEach((op) =>
+  AuthSchema.pre(op, function (next) {
+    next(new Error('Operation not allowed on this schema'));
+  })
+);
 
 const authModel = mongoose.model(DBCollections.Auth, AuthSchema);
 export default authModel;

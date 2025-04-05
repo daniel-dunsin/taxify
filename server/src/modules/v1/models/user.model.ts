@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose, { MongooseQueryOrDocumentMiddleware } from 'mongoose';
 import { createSchema } from '../../../utils';
 import { User } from '../@types/db';
 import { Role } from '../@types/enums';
@@ -37,5 +37,17 @@ const UserSchema = createSchema<User>({
     enum: Object.values(Role),
   },
 });
+
+const restrictedOperations: MongooseQueryOrDocumentMiddleware[] = [
+  'deleteMany',
+  'deleteOne',
+  'findOneAndDelete',
+];
+
+restrictedOperations.forEach((op) =>
+  UserSchema.pre(op, function (next) {
+    next(new Error('Operation not allowed on this schema'));
+  })
+);
 
 export const userModel = mongoose.model(DBCollections.User, UserSchema);

@@ -1,5 +1,6 @@
 import {
   DriverStatus,
+  PresetAddresses,
   Role,
   TokenType,
   VehicleType,
@@ -83,7 +84,7 @@ export interface Vehicle extends DbMixins {
   is_active: boolean;
 }
 
-export interface VehicleGroup {
+export interface VehicleGroup extends DbMixins {
   name: VehicleType;
   min_fare: number;
   rate_per_km: number;
@@ -103,4 +104,14 @@ export interface Wallet extends DbMixins, BankDetails {
   balance: number;
   currency: string;
   currency_symbol: string;
+}
+
+export interface Address extends DbMixins {
+  state: string;
+  city: string;
+  country: string;
+  street_address: string;
+  location: Location;
+  user?: User;
+  name: string | PresetAddresses;
 }
