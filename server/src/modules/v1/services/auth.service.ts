@@ -238,6 +238,7 @@ export const signUpDriver = async (body: DriverSignUpDto) => {
     color: vehicle_color,
     group: vehicleGroup?._id,
     rules: vehicle_rules,
+    driver: driver._id,
   });
 
   const { url: nin_image_url, public_id: nin_image_id } = await uploadAsset(

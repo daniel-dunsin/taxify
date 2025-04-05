@@ -1,4 +1,5 @@
 import { HttpStatusCode } from '../../../utils/constants';
+import { User } from './db';
 
 export class HttpError extends Error {
   statusCode: HttpStatusCode;
@@ -18,5 +19,13 @@ export class HttpError extends Error {
       )?.[0] ||
       'UnknownError';
     this.stackTrace = this.stack;
+  }
+}
+
+declare global {
+  namespace Express {
+    interface Request {
+      user?: User;
+    }
   }
 }

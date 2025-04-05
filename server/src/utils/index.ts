@@ -84,6 +84,7 @@ export function createSchema<T = any>(
       ...modelDefinition,
     },
     {
+      timestamps: true,
       virtuals: true,
       id: false,
       versionKey: false,
@@ -208,11 +209,11 @@ export const signJwt = (payload: any, options?: SignOptions) => {
   });
 };
 
-export const verifyJwt = async (token: string) => {
+export const verifyJwt = async <T = any>(token: string) => {
   return Jwt.verify(token, Env.jwtSecret, {
     algorithms: ['HS256'],
     ignoreExpiration: false,
-  });
+  }) as T;
 };
 
 export const hashString = async (plain: string) => {
@@ -220,5 +221,5 @@ export const hashString = async (plain: string) => {
 };
 
 export const verifyHash = async (plain: string, hash: string) => {
-  return await argon.verify(plain, hash);
+  return await argon.verify(hash, plain);
 };

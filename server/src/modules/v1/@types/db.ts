@@ -80,6 +80,7 @@ export interface Vehicle extends DbMixins {
   color: string;
   registration_date: Date;
   rules: string[];
+  is_active: boolean;
 }
 
 export interface VehicleGroup {
