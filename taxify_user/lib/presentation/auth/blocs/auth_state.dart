@@ -28,3 +28,9 @@ class VerifyOtpLoading extends AuthState {}
 class VerifyOtpSuccess extends AuthState {}
 
 class VerifyOtpFailed extends AuthState {}
+
+class GetUserLoading extends AuthState {}
+
+class GetUserSuccess extends AuthState {}
+
+class GetUserFailed extends AuthState {}

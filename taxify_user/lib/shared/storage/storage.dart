@@ -59,4 +59,8 @@ class AppStorage {
     if (jsonString == null) return null;
     return jsonDecode(jsonString);
   }
+
+  static Future<void> removeObject({required String key}) async {
+    await localStorage.remove(key);
+  }
 }

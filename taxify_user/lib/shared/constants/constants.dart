@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 class AppColors {
@@ -8,6 +10,7 @@ class AppColors {
   static const Color lightGray = Color.fromARGB(232, 152, 152, 152);
   static const Color error = Color(0XFFE53935);
   static const Color success = Color.fromARGB(255, 1, 204, 25);
+  static const Color info = Color.fromARGB(255, 1, 96, 204);
 }
 
 class AppFonts {
@@ -15,7 +18,11 @@ class AppFonts {
 }
 
 class AppConstants {
-  static const serverBaseUrl = "http://localhost:3001/api/v1";
+  static String get serverBaseUrl {
+    return Platform.isAndroid
+        ? "http://10.2.2:3001/api/v1"
+        : "http://localhost:3001/api/v1";
+  }
 }
 
 class AppStorageConstants {
@@ -25,7 +32,7 @@ class AppStorageConstants {
 class AppStyles {
   static const defaultPagePadding = EdgeInsets.symmetric(
     vertical: 20,
-    horizontal: 24,
+    horizontal: 20,
   );
 }
 

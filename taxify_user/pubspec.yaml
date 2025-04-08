@@ -25,6 +25,8 @@ dependencies:
   flutter_screenutil: ^5.9.3
   shared_preferences: ^2.5.3
   toastification: ^3.0.2
+  cached_network_image: ^3.4.1
+  webview_flutter_plus: ^0.4.15
 
 dev_dependencies:
   flutter_test:

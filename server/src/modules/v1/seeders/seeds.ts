@@ -8,7 +8,7 @@ export const VehicleCategories: Omit<
   {
     name: 'Bike',
     image:
-      'https://res.cloudinary.com/denettr1i/image/upload/v1743292443/small_bike_f1z55m.jpg',
+      'https://res.cloudinary.com/denettr1i/image/upload/v1743691949/small_bike-removebg-preview__1___1_-removebg-preview_1_i0gm30.png',
     rate_discount_amount: 2000,
   },
   {

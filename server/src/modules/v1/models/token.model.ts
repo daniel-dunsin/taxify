@@ -13,6 +13,10 @@ const TokenSchema = createSchema<Token>({
     type: String,
     required: true,
   },
+  user: {
+    type: String,
+    ref: DBCollections.User,
+  },
   expires_at: {
     type: Date,
     required: false,

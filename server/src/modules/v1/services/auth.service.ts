@@ -62,8 +62,7 @@ export const upsertToken = async (data: Partial<Token>) => {
       token_type: data.token_type,
     },
     {
-      value: data.value,
-      expires_at: data.expires_at,
+      ...data,
     },
     {
       upsert: true,

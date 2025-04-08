@@ -5,17 +5,18 @@ import 'package:taxify_user/shared/network/network_interceptor.dart';
 enum ContentType { formData, json }
 
 class NetworkService {
-  String baseUrl;
+  String? baseUrl;
   ContentType? contentType;
   bool? hasAuth;
   Dio? _dio;
 
   NetworkService({
     this.hasAuth = false,
-    this.baseUrl = AppConstants.serverBaseUrl,
     this.contentType = ContentType.json,
+    String? baseUrl,
   }) {
-    _dio = Dio(BaseOptions(baseUrl: baseUrl))
+    this.baseUrl = baseUrl ?? AppConstants.serverBaseUrl;
+    _dio = Dio(BaseOptions(baseUrl: this.baseUrl!))
       ..interceptors.add(
         NetworkInterceptor(
           hasAuth: hasAuth!,

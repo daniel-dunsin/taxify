@@ -155,7 +155,8 @@ final defaultTheme = ThemeData(
   listTileTheme: ListTileThemeData(
     minTileHeight: 30,
     minVerticalPadding: 0,
-    contentPadding: EdgeInsets.symmetric(vertical: 2, horizontal: 15),
+    contentPadding: EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+    titleAlignment: ListTileTitleAlignment.center,
   ),
   bottomNavigationBarTheme: BottomNavigationBarThemeData(
     selectedLabelStyle: TextStyle(fontSize: 13.h),

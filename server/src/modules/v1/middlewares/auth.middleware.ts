@@ -4,7 +4,6 @@ import { HttpStatusCode } from '../../../utils/constants';
 import { verifyHash, verifyJwt } from '../../../utils';
 import Logger from '../../../configs/logger';
 import authModel from '../models/auth.model';
-import { Error } from 'mongoose';
 import { isAfter, isBefore } from 'date-fns';
 import { userModel } from '../models/user.model';
 import { Role } from '../@types/enums';

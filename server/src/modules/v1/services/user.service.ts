@@ -1,15 +1,32 @@
 import { isEmpty } from 'lodash';
 import Logger from '../../../configs/logger';
 import { HttpStatusCode } from '../../../utils/constants';
-import { PresetAddresses, Role } from '../@types/enums';
+import { PresetAddresses, Role, TokenType } from '../@types/enums';
 import { HttpError } from '../@types/globals';
 import addressModel from '../models/address.model';
 import driverModel from '../models/driver.model';
 import { userModel } from '../models/user.model';
 import vehicleModel from '../models/vehicle.model';
 import walletModel from '../models/wallet.model';
-import { CreateAddressDto, UpdateAddressDto } from '../schemas/user.schema';
-import { Address } from '../@types/db';
+import {
+  CreateAddressDto,
+  UpdateAddressDto,
+  UpdateUserDto,
+  UpdateUserEmailDto,
+  VerifyEmailUpdateDto,
+} from '../schemas/user.schema';
+import { Address, User } from '../@types/db';
+import {
+  deleteAsset,
+  formatCountryPhoneNumber,
+  generateOtp,
+  uploadAsset,
+} from '../../../utils';
+import { UpdateQuery } from 'mongoose';
+import { upsertToken } from './auth.service';
+import { add, isAfter } from 'date-fns';
+import { emailQueue } from '../queues/email.queue';
+import { tokenModel } from '../models/token.model';
 
 const logger = new Logger('userService');
 
@@ -62,8 +79,15 @@ export const createAddress = async (
   user_id: string,
   body: CreateAddressDto
 ) => {
-  const { state, street_address, city, country, location_coordinates, name } =
-    body!;
+  const {
+    state,
+    street_address,
+    city,
+    country,
+    location_coordinates,
+    name,
+    country_iso,
+  } = body!;
 
   if (!isEmpty(name)) {
     const saved_address = await addressModel.findOne({
@@ -83,6 +107,7 @@ export const createAddress = async (
   const data = await addressModel.create({
     state,
     country,
+    country_iso,
     city,
     street_address,
     name,
@@ -120,10 +145,7 @@ export const getUserAddresses = async (user_id: string) => {
             $first: {
               $cond: {
                 if: {
-                  $eq: [
-                    '$name',
-                    { $regex: new RegExp(`^${PresetAddresses.Home}$`, 'i') },
-                  ],
+                  $eq: ['$name', PresetAddresses.Home],
                 },
                 then: '$$ROOT',
                 else: null,
@@ -134,10 +156,7 @@ export const getUserAddresses = async (user_id: string) => {
             $first: {
               $cond: {
                 if: {
-                  $eq: [
-                    '$name',
-                    { $regex: new RegExp(`^${PresetAddresses.Work}$`, 'i') },
-                  ],
+                  $eq: ['$name', PresetAddresses.Work],
                 },
                 then: '$$ROOT',
                 else: null,
@@ -148,12 +167,9 @@ export const getUserAddresses = async (user_id: string) => {
             $push: {
               $cond: [
                 {
-                  $nin: [
-                    '$name',
-                    [
-                      { $regex: new RegExp(`^${PresetAddresses.Work}$`, 'i') },
-                      { $regex: new RegExp(`^${PresetAddresses.Home}$`, 'i') },
-                    ],
+                  $and: [
+                    { $ne: ['$name', PresetAddresses.Home] },
+                    { $ne: ['$name', PresetAddresses.Work] },
                   ],
                 },
                 '$$ROOT',
@@ -168,6 +184,7 @@ export const getUserAddresses = async (user_id: string) => {
           home: 1,
           work: 1,
           others: 1,
+          _id: 0,
         },
       },
     ])
@@ -201,6 +218,7 @@ export const updateAddress = async (
     city = null,
     country = null,
     location_coordinates = null,
+    country_iso = null,
     name = null,
   } = body!;
 
@@ -225,6 +243,7 @@ export const updateAddress = async (
         city,
         street_address,
         country,
+        country_iso,
         name,
         ...(location_coordinates && {
           location: {
@@ -246,5 +265,127 @@ export const updateAddress = async (
     success: true,
     msg: 'Location updated successfully',
     data,
+  };
+};
+
+export const updateUser = async (user_id: string, body: UpdateUserDto) => {
+  const { phoneNumber, firstName, lastName, profilePicture } = body!;
+
+  if (phoneNumber) {
+    const existing_user = await userModel.findOne({
+      _id: { $ne: user_id },
+      phoneNumber: formatCountryPhoneNumber(phoneNumber),
+    });
+
+    if (existing_user) {
+      throw new HttpError(
+        HttpStatusCode.BadRequest,
+        'Oops! another user exists with this phone number'
+      );
+    }
+  }
+
+  const user = await userModel.findById(user_id).select('+profile_picture_id');
+
+  if (!user) throw new HttpError(HttpStatusCode.NotFound, 'User not found');
+
+  const updatePayload: UpdateQuery<User> = {
+    ...(phoneNumber && { phoneNumber: formatCountryPhoneNumber(phoneNumber) }),
+    firstName,
+    lastName,
+  };
+
+  if (profilePicture) {
+    const { url, public_id } = await uploadAsset(profilePicture);
+
+    updatePayload.profile_picture = url;
+    updatePayload.profile_picture_id = public_id;
+  }
+
+  await userModel.updateOne({ _id: user_id }, updatePayload);
+
+  if (user.profile_picture_id) {
+    await deleteAsset(user.profile_picture_id);
+  }
+
+  return {
+    success: true,
+    msg: 'user updated successfully',
+  };
+};
+
+export const updateUserEmail = async (
+  user_id: string,
+  body: UpdateUserEmailDto
+) => {
+  const { email } = body!;
+
+  const user = await userModel.findById(user_id);
+
+  if (!user) throw new HttpError(HttpStatusCode.NotFound, 'User not found');
+
+  const existingUser = await userModel.findOne({
+    _id: { $ne: user_id },
+    email,
+  });
+
+  if (existingUser)
+    throw new HttpError(
+      HttpStatusCode.BadRequest,
+      'Oops! another user exists with this email address'
+    );
+
+  const otpCode = generateOtp();
+
+  await upsertToken({
+    identifier: email,
+    value: otpCode,
+    token_type: TokenType.changeEmail,
+    user: user._id,
+    expires_at: add(new Date(), { minutes: 10 }),
+  });
+
+  await emailQueue.add({
+    to: email,
+    subject: 'Taxify: Verify new email',
+    template: 'change-email-verification.ejs',
+    context: {
+      name: user?.firstName,
+      otp: otpCode,
+    },
+  });
+
+  return {
+    success: true,
+    msg: 'Success, verify new email',
+  };
+};
+
+export const verifyEmailUpdate = async (body: VerifyEmailUpdateDto) => {
+  const { email, otp } = body!;
+
+  const token = await tokenModel.findOne({
+    identifier: email,
+    token_type: TokenType.changeEmail,
+  });
+
+  if (!token || isAfter(new Date(), token.expires_at))
+    throw new HttpError(
+      HttpStatusCode.BadRequest,
+      'Otp is invalid or has expired'
+    );
+
+  if (token.value != otp)
+    throw new HttpError(
+      HttpStatusCode.BadRequest,
+      'Otp is invalid or has expired'
+    );
+
+  await userModel.updateOne({ _id: token.user }, { email });
+  await token.deleteOne();
+
+  return {
+    success: true,
+    msg: 'Email updated',
   };
 };

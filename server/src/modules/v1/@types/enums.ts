@@ -1,6 +1,7 @@
 export enum TokenType {
   accountVerification = 'accountVerification',
   login = 'login',
+  changeEmail = 'changeEmail',
 }
 
 export enum Role {

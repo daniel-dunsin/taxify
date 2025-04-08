@@ -6,6 +6,7 @@ import 'package:taxify_user/config/ioc.dart';
 import 'package:taxify_user/data/auth/verify_otp_model.dart';
 import 'package:taxify_user/presentation/auth/blocs/auth_bloc.dart';
 import 'package:taxify_user/presentation/auth/routes/auth_routes.dart';
+import 'package:taxify_user/presentation/home/routes/home_routes.dart';
 import 'package:taxify_user/shared/constants/constants.dart';
 import 'package:taxify_user/shared/network/network_toast.dart';
 import 'package:taxify_user/shared/utils/utils.dart';
@@ -73,6 +74,7 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
                     GoRouter.of(context).goNamed(AuthRoutes.signIn);
                   } else {
                     NetworkToast.handleSuccess("Login successful");
+                    GoRouter.of(context).goNamed(HomeRoutes.index);
                   }
                 }
               }

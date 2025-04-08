@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:taxify_driver/shared/constants/constants.dart';
-import 'package:taxify_driver/shared/theme/default_theme.dart';
+import 'default_theme.dart';
 
 final lightTheme = defaultTheme.copyWith(
   appBarTheme: defaultTheme.appBarTheme.copyWith(

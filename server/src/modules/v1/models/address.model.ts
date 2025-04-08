@@ -20,6 +20,9 @@ export const AddressSchema = createSchema<Address>({
   country: {
     type: String,
   },
+  country_iso: {
+    type: String,
+  },
   street_address: {
     type: String,
   },

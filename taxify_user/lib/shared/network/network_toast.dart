@@ -1,7 +1,11 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:taxify_user/shared/constants/constants.dart';
+import 'package:taxify_user/shared/navigation/navigation_router.dart';
+import 'package:taxify_user/shared/utils/utils.dart';
 import 'package:toastification/toastification.dart';
+
+enum ToastType { success, error, info }
 
 class NetworkToast {
   static void handleError(dynamic error) {
@@ -14,11 +18,13 @@ class NetworkToast {
 
     if (error is DioException) {
       switch (error.type) {
+        case DioExceptionType.unknown:
+          errorMessage = "Something went wrong";
+          break;
         case DioExceptionType.cancel:
           errorMessage = "Request Cancelled";
           break;
         case DioExceptionType.connectionError:
-        case DioExceptionType.unknown:
           errorMessage = "Network Error";
           break;
         case DioExceptionType.connectionTimeout:
@@ -33,9 +39,9 @@ class NetworkToast {
 
     toastification.showCustom(
       autoCloseDuration: const Duration(seconds: 2),
-      alignment: Alignment.topCenter,
+      alignment: Alignment.bottomCenter,
       builder: (context, item) {
-        return _buildMessage(message: errorMessage, isError: true);
+        return _buildMessage(message: errorMessage, toastType: ToastType.error);
       },
     );
   }
@@ -43,15 +49,25 @@ class NetworkToast {
   static void handleSuccess(String message) {
     toastification.showCustom(
       autoCloseDuration: const Duration(seconds: 2),
-      alignment: Alignment.topCenter,
+      alignment: Alignment.bottomCenter,
       builder: (context, item) {
-        return _buildMessage(message: message, isError: false);
+        return _buildMessage(message: message, toastType: ToastType.success);
+      },
+    );
+  }
+
+  static void handleInfo(String message) {
+    toastification.showCustom(
+      autoCloseDuration: const Duration(seconds: 2),
+      alignment: Alignment.bottomCenter,
+      builder: (context, item) {
+        return _buildMessage(message: message, toastType: ToastType.info);
       },
     );
   }
 }
 
-Widget _buildMessage({required String message, required bool isError}) {
+Widget _buildMessage({required String message, required ToastType toastType}) {
   return Center(
     child: FractionallySizedBox(
       widthFactor: 0.9,
@@ -62,12 +78,19 @@ Widget _buildMessage({required String message, required bool isError}) {
         margin: const EdgeInsets.symmetric(vertical: 5),
         decoration: BoxDecoration(
           color:
-              isError
+              toastType == ToastType.error
                   ? const Color.fromARGB(104, 229, 56, 53)
-                  : const Color.fromARGB(75, 15, 240, 41),
+                  : toastType == ToastType.success
+                  ? const Color.fromARGB(75, 15, 240, 41)
+                  : const Color.fromARGB(74, 15, 97, 240),
           borderRadius: BorderRadius.circular(3),
           border: Border.all(
-            color: isError ? AppColors.error : AppColors.success,
+            color:
+                toastType == ToastType.error
+                    ? AppColors.error
+                    : toastType == ToastType.success
+                    ? AppColors.success
+                    : AppColors.info,
           ),
         ),
         child: Row(
@@ -78,10 +101,19 @@ Widget _buildMessage({required String message, required bool isError}) {
               height: 40,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(40),
-                color: isError ? AppColors.error : AppColors.success,
+                color:
+                    toastType == ToastType.error
+                        ? AppColors.error
+                        : toastType == ToastType.success
+                        ? AppColors.success
+                        : AppColors.info,
               ),
               child: Icon(
-                isError ? Icons.error_outline : Icons.check,
+                toastType == ToastType.error
+                    ? Icons.error_outline
+                    : toastType == ToastType.success
+                    ? Icons.check
+                    : Icons.info_outline,
                 color: Colors.white,
               ),
             ),
@@ -93,11 +125,18 @@ Widget _buildMessage({required String message, required bool isError}) {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    isError ? "Error" : "Success",
+                    toastType == ToastType.error
+                        ? "Error"
+                        : toastType == ToastType.success
+                        ? "Success"
+                        : "Info",
                     style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.bold,
-                      color: Colors.black,
+                      color:
+                          getColorSchema(
+                            navigatorKey.currentContext!,
+                          ).onPrimary,
                     ),
                   ),
                   const SizedBox(height: 5),
@@ -106,7 +145,10 @@ Widget _buildMessage({required String message, required bool isError}) {
                     style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.normal,
-                      color: Colors.black,
+                      color:
+                          getColorSchema(
+                            navigatorKey.currentContext!,
+                          ).onPrimary,
                     ),
                     maxLines: 3,
                     overflow: TextOverflow.ellipsis,

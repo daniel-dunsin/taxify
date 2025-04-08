@@ -27,3 +27,7 @@ class VerifyLoginOtpRequested extends AuthEvents {
 
   VerifyLoginOtpRequested(this.verifyOtpModel);
 }
+
+class GetUserRequested extends AuthEvents {
+  GetUserRequested();
+}

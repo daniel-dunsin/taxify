@@ -1,7 +1,13 @@
 import { Request } from 'express';
 import { asyncHandler } from '../../../utils';
 import * as userService from '../services/user.service';
-import { CreateAddressDto, UpdateAddressDto } from '../schemas/user.schema';
+import {
+  CreateAddressDto,
+  UpdateAddressDto,
+  UpdateUserDto,
+  UpdateUserEmailDto,
+  VerifyEmailUpdateDto,
+} from '../schemas/user.schema';
 
 export const getUser = asyncHandler((req, res) =>
   userService.getUser(req.user?._id!)
@@ -26,4 +32,18 @@ export const getUserAddresses = asyncHandler((req) =>
 export const deleteAddress = asyncHandler(
   (req: Request<UpdateAddressDto['params']>) =>
     userService.deleteAddress(req.params?.address_id!)
+);
+
+export const updateUser = asyncHandler((req: Request<{}, {}, UpdateUserDto>) =>
+  userService.updateUser(req.user?._id!, req.body)
+);
+
+export const updateUserEmail = asyncHandler(
+  (req: Request<{}, {}, UpdateUserEmailDto>) =>
+    userService.updateUserEmail(req.user?._id!, req.body)
+);
+
+export const verifyEmailUpdate = asyncHandler(
+  (req: Request<{}, {}, VerifyEmailUpdateDto>) =>
+    userService.verifyEmailUpdate(req.body)
 );

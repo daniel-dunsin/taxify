@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:taxify_user/shared/constants/constants.dart';
-import 'package:taxify_user/shared/theme/default_theme.dart';
+import 'default_theme.dart';
 
 final lightTheme = defaultTheme.copyWith(
   appBarTheme: defaultTheme.appBarTheme.copyWith(
@@ -17,7 +17,7 @@ final lightTheme = defaultTheme.copyWith(
       color: AppColors.dark,
     ),
   ),
-  iconTheme: IconThemeData(color: AppColors.dark),
+  iconTheme: IconThemeData(color: AppColors.light),
   scaffoldBackgroundColor: const Color.fromARGB(255, 246, 246, 246),
   dialogTheme: defaultTheme.dialogTheme.copyWith(
     barrierColor: Color.fromRGBO(0, 0, 0, 0.4),

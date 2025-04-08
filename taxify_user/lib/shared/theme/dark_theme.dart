@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:taxify_user/shared/constants/constants.dart';
-import 'package:taxify_user/shared/theme/default_theme.dart';
+import 'default_theme.dart';
 
 final darkTheme = defaultTheme.copyWith(
   appBarTheme: defaultTheme.appBarTheme.copyWith(
@@ -27,7 +27,7 @@ final darkTheme = defaultTheme.copyWith(
     primary: AppColors.dark,
     onPrimary: AppColors.light,
     secondary: AppColors.darkGray,
-    onSecondary: Colors.grey[200]!,
+    onSecondary: Colors.grey[400]!,
     surface: AppColors.accent,
     onSurface: AppColors.light,
     error: AppColors.error,

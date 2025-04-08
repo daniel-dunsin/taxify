@@ -37,6 +37,7 @@ export interface Token extends DbMixins {
   identifier: string;
   value: string;
   token_type: TokenType;
+  user: User | string;
   expires_at: Date;
 }
 
@@ -110,6 +111,7 @@ export interface Address extends DbMixins {
   state: string;
   city: string;
   country: string;
+  country_iso?: string;
   street_address: string;
   location: Location;
   user?: User;

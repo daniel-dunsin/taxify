@@ -10,6 +10,7 @@ class AppColors {
   static const Color lightGray = Color.fromARGB(232, 152, 152, 152);
   static const Color error = Color(0XFFE53935);
   static const Color success = Color.fromARGB(255, 1, 204, 25);
+  static const Color info = Color.fromARGB(255, 1, 96, 204);
 }
 
 class AppFonts {
