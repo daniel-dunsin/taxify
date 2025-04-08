@@ -27,7 +27,7 @@ final darkTheme = defaultTheme.copyWith(
     primary: AppColors.dark,
     onPrimary: AppColors.light,
     secondary: AppColors.darkGray,
-    onSecondary: Colors.grey[400]!,
+    onSecondary: Colors.grey[300]!,
     surface: AppColors.accent,
     onSurface: AppColors.light,
     error: AppColors.error,

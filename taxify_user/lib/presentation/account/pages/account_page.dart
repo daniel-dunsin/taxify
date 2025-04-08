@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:taxify_user/config/ioc.dart';
 import 'package:taxify_user/data/user/user_model.dart';
+import 'package:taxify_user/presentation/account/pages/profile_page.dart';
 import 'package:taxify_user/presentation/account/pages/settings_page.dart';
 import 'package:taxify_user/presentation/account/routes/account_routes.dart';
 import 'package:taxify_user/shared/network/network_toast.dart';
@@ -17,14 +18,9 @@ class AccountPage extends StatefulWidget {
 }
 
 class _AccountPageState extends State<AccountPage> {
-  late User user;
-
   @override
   void initState() {
     super.initState();
-
-    user = getIt.get<User>();
-    print(user.profilePicture);
   }
 
   @override
@@ -71,6 +67,8 @@ class _AccountPageState extends State<AccountPage> {
   }
 
   _buildHeader() {
+    User user = getIt.get<User>();
+
     return Row(
       children: [
         Expanded(
@@ -80,10 +78,13 @@ class _AccountPageState extends State<AccountPage> {
           ),
         ),
         SizedBox(width: 50),
-        CircleAvatar(
-          backgroundColor: Colors.grey[200],
-          backgroundImage: CachedNetworkImageProvider(user.profilePicture),
-          radius: 30,
+        GestureDetector(
+          onTap: () => ProfilePageUtil.open(context),
+          child: CircleAvatar(
+            backgroundColor: Colors.grey[200],
+            backgroundImage: CachedNetworkImageProvider(user.profilePicture),
+            radius: 30,
+          ),
         ),
       ],
     );
@@ -98,7 +99,7 @@ class _AccountPageState extends State<AccountPage> {
           onClick: () {
             GoRouter.of(context).pushNamed(
               SharedRoutes.webView,
-              extra: {"url": "https://help.uber.com"},
+              extra: {"url": "https://help.uber.com", "title": "Help"},
             );
           },
         ),
@@ -139,7 +140,7 @@ class _AccountPageState extends State<AccountPage> {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(icon),
+              Icon(icon, color: getColorSchema(context).onSecondary),
               SizedBox(height: 5),
               Text(title, style: getTextTheme(context).bodyLarge),
             ],

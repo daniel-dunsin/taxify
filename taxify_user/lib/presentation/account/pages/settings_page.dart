@@ -1,12 +1,12 @@
 import 'dart:math';
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:taxify_user/config/ioc.dart';
 import 'package:taxify_user/data/shared/account_settings_tile_model.dart';
 import 'package:taxify_user/data/user/user_model.dart';
+import 'package:taxify_user/presentation/account/pages/profile_page.dart';
 import 'package:taxify_user/shared/constants/constants.dart';
 import 'package:taxify_user/shared/network/network_toast.dart';
 import 'package:taxify_user/shared/utils/utils.dart';
@@ -18,6 +18,7 @@ class SettingsPageUtil {
       context: context,
       useRootNavigator: true,
       useSafeArea: true,
+      barrierColor: Colors.transparent,
       isDismissible: false,
       isScrollControlled: true,
       builder: (context) {
@@ -79,13 +80,11 @@ class _SettingsPageState extends State<SettingsPage>
     with SingleTickerProviderStateMixin {
   late AnimationController animationController;
   late Animation<double> animation;
-  late User user;
+  User user = getIt.get<User>();
 
   @override
   void initState() {
     super.initState();
-
-    user = getIt.get<User>();
 
     animationController = AnimationController(
       vsync: this,
@@ -133,7 +132,6 @@ class _SettingsPageState extends State<SettingsPage>
             showDragHandle: false,
             enableDrag: false,
             animationController: animationController,
-
             builder:
                 (context) => Scaffold(
                   appBar: AppBar(
@@ -172,7 +170,7 @@ class _SettingsPageState extends State<SettingsPage>
 
   _buildProfile() {
     return ListTile(
-      onTap: () => NetworkToast.handleInfo("Not implemented"),
+      onTap: () => ProfilePageUtil.open(context),
       contentPadding: EdgeInsets.all(0),
       leading: AppCircularImage(image: user.profilePicture, radius: 30),
       titleAlignment: ListTileTitleAlignment.center,
@@ -201,7 +199,7 @@ class _SettingsPageState extends State<SettingsPage>
       ),
       trailing: Icon(
         Icons.chevron_right,
-        color: getColorSchema(context).secondary,
+        color: getColorSchema(context).onSecondary,
       ),
       horizontalTitleGap: 20,
     );
@@ -239,12 +237,12 @@ class _SettingsPageState extends State<SettingsPage>
                     : () => tiles[i].onClick!(),
             trailing: Icon(
               Icons.chevron_right,
-              color: getColorSchema(context).secondary,
+              color: getColorSchema(context).onSecondary,
             ),
           ),
           Divider(
             thickness: i == tiles.length - 1 ? 5 : 1.5,
-            color: getColorSchema(context).secondary,
+            color: getColorSchema(context).onSecondary,
           ),
         ],
 

@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:taxify_user/presentation/account/pages/account_page.dart';
+import 'package:taxify_user/presentation/account/pages/change_email.dart';
+import 'package:taxify_user/presentation/account/pages/change_name_page.dart';
+import 'package:taxify_user/presentation/account/pages/change_phone_number.dart';
+import 'package:taxify_user/presentation/account/pages/change_profile_picture.dart';
 import 'package:taxify_user/presentation/account/pages/wallet_page.dart';
 import 'package:taxify_user/presentation/account/routes/account_routes.dart';
 import 'package:taxify_user/presentation/activity/pages/activity_page.dart';
@@ -127,7 +131,41 @@ final goRouter = GoRouter(
       name: SharedRoutes.webView,
       pageBuilder: (context, state) {
         final extra = state.extra as Map;
-        return MaterialPage(child: WebPage(webPageUrl: extra["url"]));
+        return MaterialPage(
+          child: WebPage(webPageUrl: extra["url"], title: extra["title"]),
+        );
+      },
+    ),
+
+    GoRoute(
+      path: AccountRoutes.changeName,
+      name: AccountRoutes.changeName,
+      pageBuilder: (context, state) {
+        return MaterialPage(child: ChangeNamePage());
+      },
+    ),
+
+    GoRoute(
+      path: AccountRoutes.changeEmail,
+      name: AccountRoutes.changeEmail,
+      pageBuilder: (context, state) {
+        return MaterialPage(child: ChangeEmailPage());
+      },
+    ),
+
+    GoRoute(
+      path: AccountRoutes.changeNumber,
+      name: AccountRoutes.changeNumber,
+      pageBuilder: (context, state) {
+        return MaterialPage(child: ChangePhoneNumberPage());
+      },
+    ),
+
+    GoRoute(
+      path: AccountRoutes.changeProfilePicture,
+      name: AccountRoutes.changeProfilePicture,
+      pageBuilder: (context, state) {
+        return MaterialPage(child: ChangeProfilePicturePage());
       },
     ),
   ],

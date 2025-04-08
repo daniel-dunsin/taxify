@@ -87,6 +87,21 @@ class AuthBloc extends Bloc<AuthEvents, AuthState> {
       }
     });
 
+    on<VerifyEmailUpdateOtpRequested>((event, emit) async {
+      emit(VerifyOtpLoading());
+
+      try {
+        await userRepository.verifyEmailUpdateOtp(event.verifyOtpModel);
+
+        await userRepository.getAndRegisterUser();
+
+        emit(VerifyOtpSuccess());
+      } catch (e) {
+        NetworkToast.handleError(e);
+        emit(VerifyOtpFailed());
+      }
+    });
+
     on<GetUserRequested>((event, emit) async {
       emit(GetUserLoading());
 

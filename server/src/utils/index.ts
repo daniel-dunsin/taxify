@@ -57,7 +57,7 @@ export function asyncHandler(
       }
 
       logger.log(
-        `${statusCode}: Request to ${req.path} completed successfully\n`
+        `${req.method} request to ${req.url} completed successfully\n`
       );
 
       res.status(statusCode).json(

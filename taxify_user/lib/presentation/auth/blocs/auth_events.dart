@@ -28,6 +28,12 @@ class VerifyLoginOtpRequested extends AuthEvents {
   VerifyLoginOtpRequested(this.verifyOtpModel);
 }
 
+class VerifyEmailUpdateOtpRequested extends AuthEvents {
+  final VerifyOtpModel verifyOtpModel;
+
+  VerifyEmailUpdateOtpRequested(this.verifyOtpModel);
+}
+
 class GetUserRequested extends AuthEvents {
   GetUserRequested();
 }

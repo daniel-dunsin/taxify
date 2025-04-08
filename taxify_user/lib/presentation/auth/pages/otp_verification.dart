@@ -17,7 +17,7 @@ import 'package:taxify_user/shared/widgets/dialog_loader.dart';
 import 'package:taxify_user/shared/widgets/logo.dart';
 import 'package:taxify_user/shared/widgets/text_input.dart';
 
-enum OtpReason { login, signUp }
+enum OtpReason { login, signUp, changeEmail }
 
 class OtpVerificationPage extends StatefulWidget {
   final OtpReason otpReason;
@@ -44,7 +44,11 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
           ? VerifyLoginOtpRequested(
             VerifyOtpModel(phoneNumber: widget.email, otp: otpController.text),
           )
-          : VerifySignUpOtpRequested(
+          : widget.otpReason == OtpReason.signUp
+          ? VerifySignUpOtpRequested(
+            VerifyOtpModel(email: widget.email, otp: otpController.text),
+          )
+          : VerifyEmailUpdateOtpRequested(
             VerifyOtpModel(email: widget.email, otp: otpController.text),
           ),
     );
@@ -72,9 +76,13 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
                   if (widget.otpReason == OtpReason.signUp) {
                     NetworkToast.handleSuccess("Account verified successfully");
                     GoRouter.of(context).goNamed(AuthRoutes.signIn);
-                  } else {
+                  } else if (widget.otpReason == OtpReason.login) {
                     NetworkToast.handleSuccess("Login successful");
                     GoRouter.of(context).goNamed(HomeRoutes.index);
+                  } else {
+                    NetworkToast.handleSuccess("Email updated successfully");
+                    GoRouter.of(context).pop();
+                    GoRouter.of(context).pop();
                   }
                 }
               }

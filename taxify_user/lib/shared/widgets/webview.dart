@@ -1,14 +1,13 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:taxify_user/shared/utils/utils.dart';
 import 'package:taxify_user/shared/widgets/bouncing_loader.dart';
-import 'package:taxify_user/shared/widgets/dialog_loader.dart';
 import 'package:webview_flutter_plus/webview_flutter_plus.dart';
 
 class WebPage extends StatefulWidget {
   final String webPageUrl;
-  const WebPage({super.key, required this.webPageUrl});
+  final String? title;
+  const WebPage({super.key, required this.webPageUrl, this.title});
 
   @override
   State<WebPage> createState() => _WebPageState();
@@ -28,17 +27,12 @@ class _WebPageState extends State<WebPage> {
                 setState(() {
                   loading = false;
                 });
-                DialogLoader().hide();
               },
             ),
           )
           ..setJavaScriptMode(JavaScriptMode.unrestricted)
           ..setBackgroundColor(Color(0XFFFFFFFF))
           ..loadRequest(Uri.parse(widget.webPageUrl));
-
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      DialogLoader().show(context);
-    });
 
     super.initState();
   }
@@ -51,6 +45,10 @@ class _WebPageState extends State<WebPage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        title:
+            widget.title != null
+                ? Text(widget.title!, style: getTextTheme(context).bodyLarge)
+                : null,
         leading: IconButton(
           onPressed: GoRouter.of(context).pop,
           icon: Icon(Icons.close, size: 28),
