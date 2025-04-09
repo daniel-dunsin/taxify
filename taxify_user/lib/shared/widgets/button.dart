@@ -39,11 +39,7 @@ class ContainedButton extends StatelessWidget {
       onPressed: onPressed,
       label: child,
       style: ElevatedButton.styleFrom(
-        backgroundColor:
-            backgroundColor ??
-            (checkLightMode(context)
-                ? getColorSchema(context).onPrimary
-                : AppColors.accent),
+        backgroundColor: backgroundColor ?? getColorSchema(context).onPrimary,
         minimumSize: Size(120, 40),
         fixedSize: Size(width ?? 200, height ?? 50),
         foregroundColor: foregroundColor ?? getColorSchema(context).primary,

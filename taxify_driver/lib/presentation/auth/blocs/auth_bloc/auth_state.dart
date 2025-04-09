@@ -82,3 +82,15 @@ class ResolveAccountSuccess extends AuthState {
 }
 
 class ResolveAccountFailed extends AuthState {}
+
+class GetUserLoading extends AuthState {}
+
+class GetUserSuccess extends AuthState {}
+
+class GetUserFailed extends AuthState {}
+
+class SignOutLoading extends AuthState {}
+
+class SignOutSuccess extends AuthState {}
+
+class SignOutFailed extends AuthState {}

@@ -1,15 +1,22 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:taxify_user/config/ioc.dart';
 import 'package:taxify_user/data/shared/account_settings_tile_model.dart';
 import 'package:taxify_user/data/user/user_model.dart';
 import 'package:taxify_user/presentation/account/pages/profile_page.dart';
+import 'package:taxify_user/presentation/account/widgets/appearance_bottom_sheet.dart';
+import 'package:taxify_user/presentation/auth/blocs/auth_bloc.dart';
+import 'package:taxify_user/presentation/onboarding/routes/onboarding_routes.dart';
 import 'package:taxify_user/shared/constants/constants.dart';
+import 'package:taxify_user/shared/cubits/app_cubit.dart';
 import 'package:taxify_user/shared/network/network_toast.dart';
 import 'package:taxify_user/shared/utils/utils.dart';
+import 'package:taxify_user/shared/widgets/bottom_sheet.dart';
+import 'package:taxify_user/shared/widgets/dialog_loader.dart';
 import 'package:taxify_user/shared/widgets/image.dart';
 
 class SettingsPageUtil {
@@ -28,6 +35,8 @@ class SettingsPageUtil {
   }
 
   static List<AccountSettingsTileModel> getSettingsTile(BuildContext context) {
+    ThemeMode themeMode = getIt.get<AppCubit>().appThemeMode;
+
     return [
       AccountSettingsTileModel(
         icon: Icons.home,
@@ -63,7 +72,18 @@ class SettingsPageUtil {
       AccountSettingsTileModel(
         icon: Icons.invert_colors,
         title: "Appearance",
-        subtitle: "Use device settings", // change later
+        subtitle:
+            themeMode == ThemeMode.system
+                ? "Use device settings"
+                : themeMode == ThemeMode.dark
+                ? "Dark Mode"
+                : "Light Mode",
+        onClick:
+            () => AppBottomSheet.displayStatic(
+              context,
+              height: 400,
+              child: AppearanceBottomSheet(),
+            ),
       ),
     ];
   }
@@ -241,20 +261,37 @@ class _SettingsPageState extends State<SettingsPage>
             ),
           ),
           Divider(
-            thickness: i == tiles.length - 1 ? 5 : 1.5,
+            thickness: i == tiles.length - 1 ? 1.5 : .3,
             color: getColorSchema(context).onSecondary,
           ),
         ],
 
         SizedBox(height: 10),
 
-        GestureDetector(
-          onTap: () {},
-          child: Text(
-            "Sign Out",
-            style: getTextTheme(
-              context,
-            ).bodyLarge?.copyWith(color: AppColors.error),
+        BlocListener<AuthBloc, AuthState>(
+          bloc: getIt.get<AuthBloc>(),
+          listener: (context, state) {
+            if (state is SignOutLoading) {
+              DialogLoader().show(context);
+            } else {
+              DialogLoader().hide();
+              if (state is SignOutSuccess) {
+                NetworkToast.handleSuccess("Signed out");
+                GoRouter.of(context).pop();
+                GoRouter.of(context).goNamed(OnboardingRoutes.onboarding);
+              }
+            }
+          },
+          child: GestureDetector(
+            onTap: () {
+              getIt.get<AuthBloc>().add(SignOutRequested());
+            },
+            child: Text(
+              "Sign Out",
+              style: getTextTheme(
+                context,
+              ).bodyLarge?.copyWith(color: AppColors.error),
+            ),
           ),
         ),
       ],

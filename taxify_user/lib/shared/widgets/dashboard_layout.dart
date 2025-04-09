@@ -15,6 +15,10 @@ class DashboardLayout extends StatefulWidget {
 class _DashboardLayoutState extends State<DashboardLayout> {
   @override
   void initState() {
+    if (getIt.isRegistered<StatefulNavigationShell>()) {
+      getIt.unregister<StatefulNavigationShell>();
+    }
+
     getIt.registerSingleton<StatefulNavigationShell>(widget.shell);
     super.initState();
   }

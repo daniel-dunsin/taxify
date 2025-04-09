@@ -6,6 +6,7 @@ import 'package:taxify_driver/config/ioc.dart';
 import 'package:taxify_driver/data/auth/verify_otp_model.dart';
 import 'package:taxify_driver/presentation/auth/blocs/auth_bloc/auth_bloc.dart';
 import 'package:taxify_driver/presentation/auth/routes/auth_routes.dart';
+import 'package:taxify_driver/presentation/home/routes/home_routes.dart';
 import 'package:taxify_driver/shared/constants/constants.dart';
 import 'package:taxify_driver/shared/network/network_toast.dart';
 import 'package:taxify_driver/shared/utils/utils.dart';
@@ -16,7 +17,7 @@ import 'package:taxify_driver/shared/widgets/dialog_loader.dart';
 import 'package:taxify_driver/shared/widgets/logo.dart';
 import 'package:taxify_driver/shared/widgets/text_input.dart';
 
-enum OtpReason { login, signUp }
+enum OtpReason { login, signUp, changeEmail }
 
 class OtpVerificationPage extends StatefulWidget {
   final OtpReason otpReason;
@@ -43,7 +44,11 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
           ? VerifyLoginOtpRequested(
             VerifyOtpModel(phoneNumber: widget.email, otp: otpController.text),
           )
-          : VerifySignUpOtpRequested(
+          : widget.otpReason == OtpReason.signUp
+          ? VerifySignUpOtpRequested(
+            VerifyOtpModel(email: widget.email, otp: otpController.text),
+          )
+          : VerifyEmailUpdateOtpRequested(
             VerifyOtpModel(email: widget.email, otp: otpController.text),
           ),
     );
@@ -71,8 +76,13 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
                   if (widget.otpReason == OtpReason.signUp) {
                     NetworkToast.handleSuccess("Account verified successfully");
                     GoRouter.of(context).goNamed(AuthRoutes.signIn);
-                  } else {
+                  } else if (widget.otpReason == OtpReason.login) {
                     NetworkToast.handleSuccess("Login successful");
+                    GoRouter.of(context).goNamed(HomeRoutes.index);
+                  } else {
+                    NetworkToast.handleSuccess("Email updated successfully");
+                    GoRouter.of(context).pop();
+                    GoRouter.of(context).pop();
                   }
                 }
               }

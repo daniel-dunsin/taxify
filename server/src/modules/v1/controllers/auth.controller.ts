@@ -39,3 +39,7 @@ export const signUpDriver = asyncHandler(
   async (req: Request<{}, {}, DriverSignUpDto>) =>
     await authService.signUpDriver(req.body)
 );
+
+export const signOut = asyncHandler(
+  async (req) => await authService.signOut(req.user?._id!)
+);

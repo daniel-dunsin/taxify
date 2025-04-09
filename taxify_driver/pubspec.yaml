@@ -33,6 +33,7 @@ dependencies:
   intl: ^0.20.2
   flex_color_picker: ^3.7.0
   mime: ^2.0.0
+  webview_flutter_plus: ^0.4.15
 
 dev_dependencies:
   flutter_test:

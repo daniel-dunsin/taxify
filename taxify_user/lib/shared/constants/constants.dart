@@ -27,6 +27,7 @@ class AppConstants {
 
 class AppStorageConstants {
   static String accessToken = "accessToken";
+  static String themeMode = "themeMode";
 }
 
 class AppStyles {

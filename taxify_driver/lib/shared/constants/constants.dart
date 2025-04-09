@@ -29,12 +29,13 @@ class AppConstants {
 
 class AppStorageConstants {
   static String accessToken = "accessToken";
+  static String themeMode = "themeMode";
 }
 
 class AppStyles {
   static const defaultPagePadding = EdgeInsets.symmetric(
     vertical: 20,
-    horizontal: 24,
+    horizontal: 20,
   );
   static Color shimmerBaseColor = Color.fromRGBO(129, 129, 129, 0.498);
   static Color shipmmerHighlightColor = Color.fromRGBO(164, 164, 164, 1);

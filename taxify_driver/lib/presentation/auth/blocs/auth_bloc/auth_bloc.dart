@@ -1,17 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:taxify_driver/config/ioc.dart';
-import 'package:taxify_driver/data/auth/sign_up_model.dart';
 import 'package:taxify_driver/data/auth/verify_otp_model.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:taxify_driver/data/user/user_model.dart';
 import 'package:taxify_driver/data/vehicles/nhtsa_vehicle_model.dart';
 import 'package:taxify_driver/data/vehicles/vehicle_category_model.dart';
 import 'package:taxify_driver/data/vehicles/vehicle_make_model.dart';
 import 'package:taxify_driver/domain/auth/auth_repository.dart';
 import 'package:taxify_driver/data/payment/bank_model.dart';
 import 'package:taxify_driver/domain/payment/payment_repository.dart';
+import 'package:taxify_driver/domain/user/user_repository.dart';
 import 'package:taxify_driver/domain/vehicle/vehicle_repository.dart';
 import 'package:taxify_driver/presentation/auth/blocs/sign_up_steps_bloc/sign_up_steps_bloc.dart';
+import 'package:taxify_driver/shared/constants/constants.dart';
 import 'package:taxify_driver/shared/network/network_toast.dart';
+import 'package:taxify_driver/shared/storage/storage.dart';
 
 part 'auth_events.dart';
 part 'auth_state.dart';
@@ -20,11 +23,13 @@ class AuthBloc extends Bloc<AuthEvents, AuthState> {
   final AuthRepository authRepository;
   final VehicleRepository vehicleRepository;
   final PaymentRepository paymentRepository;
+  final UserRepository userRepository;
 
   AuthBloc({
     required this.authRepository,
     required this.vehicleRepository,
     required this.paymentRepository,
+    required this.userRepository,
   }) : super(AuthInitialState()) {
     on<SignUpRequested>((event, emit) async {
       emit(SignUpLoading());
@@ -76,7 +81,32 @@ class AuthBloc extends Bloc<AuthEvents, AuthState> {
       emit(VerifyOtpLoading());
 
       try {
-        await authRepository.verifySignInOtp(event.verifyOtpModel);
+        final response = await authRepository.verifySignInOtp(
+          event.verifyOtpModel,
+        );
+
+        final accessToken = response["data"]["access_token"] as String;
+
+        await AppStorage.saveString(
+          key: AppStorageConstants.accessToken,
+          value: accessToken,
+        );
+
+        await userRepository.getAndRegisterUser();
+
+        emit(VerifyOtpSuccess());
+      } catch (e) {
+        NetworkToast.handleError(e);
+        emit(VerifyOtpFailed());
+      }
+    });
+    on<VerifyEmailUpdateOtpRequested>((event, emit) async {
+      emit(VerifyOtpLoading());
+
+      try {
+        await userRepository.verifyEmailUpdateOtp(event.verifyOtpModel);
+
+        await userRepository.getAndRegisterUser();
 
         emit(VerifyOtpSuccess());
       } catch (e) {
@@ -179,6 +209,42 @@ class AuthBloc extends Bloc<AuthEvents, AuthState> {
       } catch (e) {
         NetworkToast.handleError(e);
         emit(ResolveAccountFailed());
+      }
+    });
+
+    on<GetUserRequested>((event, emit) async {
+      emit(GetUserLoading());
+
+      try {
+        final response = await userRepository.getUser();
+
+        final User user = User.fromMap(response?["data"]);
+
+        if (getIt.isRegistered<User>()) {
+          getIt.unregister<User>();
+        }
+
+        getIt.registerSingleton<User>(user);
+        emit(GetUserSuccess());
+      } catch (e) {
+        NetworkToast.handleError(e);
+        emit(GetUserFailed());
+      }
+    });
+
+    on<SignOutRequested>((event, emit) async {
+      emit(SignOutLoading());
+
+      try {
+        await authRepository.signOut();
+
+        await AppStorage.removeObject(key: AppStorageConstants.accessToken);
+        getIt.unregister<User>();
+
+        emit(SignOutSuccess());
+      } catch (e) {
+        NetworkToast.handleError(e);
+        emit(SignOutFailed());
       }
     });
   }

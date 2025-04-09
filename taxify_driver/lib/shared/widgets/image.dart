@@ -44,3 +44,45 @@ class AppImage extends StatelessWidget {
     );
   }
 }
+
+class AppCircularImage extends StatelessWidget {
+  final String image;
+  final double radius;
+  final BoxFit fit;
+
+  const AppCircularImage({
+    super.key,
+    required this.image,
+    this.radius = 30,
+    this.fit = BoxFit.cover,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(radius * 2),
+      child: CachedNetworkImage(
+        imageUrl: image,
+        width: radius * 2,
+        height: radius * 2,
+        fit: fit,
+        useOldImageOnUrlChange: true,
+        placeholder: (context, _) {
+          return Container(
+            width: radius * 2,
+            height: radius * 2,
+            color: getColorSchema(context).secondary,
+            child: BouncingLoader(),
+          );
+        },
+        errorWidget: (context, _, __) {
+          return Icon(
+            Icons.warning_outlined,
+            color: getColorSchema(context).error,
+            size: 12.h,
+          );
+        },
+      ),
+    );
+  }
+}

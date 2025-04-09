@@ -121,5 +121,21 @@ class AuthBloc extends Bloc<AuthEvents, AuthState> {
         emit(GetUserFailed());
       }
     });
+
+    on<SignOutRequested>((event, emit) async {
+      emit(SignOutLoading());
+
+      try {
+        await authRepository.signOut();
+
+        await AppStorage.removeObject(key: AppStorageConstants.accessToken);
+        getIt.unregister<User>();
+
+        emit(SignOutSuccess());
+      } catch (e) {
+        NetworkToast.handleError(e);
+        emit(SignOutFailed());
+      }
+    });
   }
 }

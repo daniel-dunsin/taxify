@@ -37,3 +37,5 @@ class VerifyEmailUpdateOtpRequested extends AuthEvents {
 class GetUserRequested extends AuthEvents {
   GetUserRequested();
 }
+
+class SignOutRequested extends AuthEvents {}

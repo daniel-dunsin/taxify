@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:taxify_user/config/ioc.dart';
+import 'package:taxify_user/data/shared/app_model.dart';
+import 'package:taxify_user/shared/cubits/app_cubit.dart';
 import 'package:taxify_user/shared/navigation/navigation_router.dart';
 import 'package:taxify_user/shared/theme/dark_theme.dart';
 import 'package:taxify_user/shared/theme/light_theme.dart';
@@ -16,7 +19,9 @@ void main() async {
 
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
-  initApp();
+  await initApp();
+
+  await getIt.get<AppCubit>().initAppTheme();
 
   runApp(const MyApp());
 }
@@ -45,16 +50,22 @@ class _MyAppState extends State<MyApp> {
       minTextAdapt: true,
       designSize: Size(393, 852),
       builder: (context, state) {
-        return ToastificationWrapper(
-          child: MaterialApp.router(
-            debugShowCheckedModeBanner: false,
-            theme: lightTheme,
-            darkTheme: darkTheme,
-            themeMode: ThemeMode.dark,
-            routerDelegate: goRouter.routerDelegate,
-            routeInformationParser: goRouter.routeInformationParser,
-            routeInformationProvider: goRouter.routeInformationProvider,
-          ),
+        return BlocBuilder<AppCubit, AppModel>(
+          bloc: getIt.get<AppCubit>(),
+          builder: (context, state) {
+            final ThemeMode themeMode = getIt.get<AppCubit>().appThemeMode;
+            return ToastificationWrapper(
+              child: MaterialApp.router(
+                debugShowCheckedModeBanner: false,
+                theme: lightTheme,
+                darkTheme: darkTheme,
+                themeMode: themeMode,
+                routerDelegate: goRouter.routerDelegate,
+                routeInformationParser: goRouter.routeInformationParser,
+                routeInformationProvider: goRouter.routeInformationProvider,
+              ),
+            );
+          },
         );
       },
     );

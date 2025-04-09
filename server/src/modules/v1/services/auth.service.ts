@@ -507,3 +507,22 @@ export const loginWithOtp = async (body: LoginWithOtpDto) => {
     },
   };
 };
+
+export const signOut = async (user_id: string) => {
+  const userAuth = await authModel.findOneAndUpdate(
+    { user: user_id },
+    {
+      $unset: {
+        accessToken: '',
+        accessTokenExpiresAt: '',
+      },
+    }
+  );
+
+  if (!userAuth) throw new HttpError(HttpStatusCode.NotFound, 'User not found');
+
+  return {
+    success: true,
+    msg: 'Signed out successfully',
+  };
+};

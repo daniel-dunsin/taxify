@@ -34,3 +34,9 @@ class GetUserLoading extends AuthState {}
 class GetUserSuccess extends AuthState {}
 
 class GetUserFailed extends AuthState {}
+
+class SignOutLoading extends AuthState {}
+
+class SignOutSuccess extends AuthState {}
+
+class SignOutFailed extends AuthState {}

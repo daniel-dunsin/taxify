@@ -82,21 +82,18 @@ class _ChangeEmailPageState extends State<ChangeEmailPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  "Phone Number",
-                  style: getTextTheme(context).headlineLarge,
-                ),
+                Text("Email", style: getTextTheme(context).headlineLarge),
                 SizedBox(height: 50),
                 Text(
-                  "You'll use this number to sign in, get notifications and recover your account",
+                  "You'll use this email to get notifications and recover your account",
                 ),
                 SizedBox(height: 10),
                 AppTextInput(
-                  labelText: "Phone Number",
-                  hintText: "Enter phone number",
+                  labelText: "Email",
+                  hintText: "Enter email",
                   controller: _emailController,
                   validator: (value) => AppValidators.defaultValidator(value),
-                  keyboardType: TextInputType.phone,
+                  keyboardType: TextInputType.emailAddress,
                 ),
                 SizedBox(height: 40),
                 ContainedButton(

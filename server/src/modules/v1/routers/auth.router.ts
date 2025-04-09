@@ -12,10 +12,12 @@ import {
   loginWithOtp,
   requestLoginOtp,
   resendSignUpOtp,
+  signOut,
   signUpDriver,
   signUpUser,
   verifyAccount,
 } from '../controllers/auth.controller';
+import { authMiddleware } from '../middlewares/auth.middleware';
 
 const authRouter = Router();
 
@@ -54,5 +56,7 @@ authRouter.post(
   validationMiddleware(loginWithOtpSchema),
   loginWithOtp
 );
+
+authRouter.get('/sign-out', authMiddleware(), signOut);
 
 export default authRouter;

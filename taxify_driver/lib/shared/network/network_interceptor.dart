@@ -40,7 +40,7 @@ class NetworkInterceptor extends Interceptor {
       }
     }
 
-    super.onRequest(options, handler);
+    super.onRequest(requestOptions, handler);
   }
 
   @override

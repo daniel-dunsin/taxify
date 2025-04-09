@@ -26,6 +26,12 @@ class VerifyLoginOtpRequested extends AuthEvents {
   VerifyLoginOtpRequested(this.verifyOtpModel);
 }
 
+class VerifyEmailUpdateOtpRequested extends AuthEvents {
+  final VerifyOtpModel verifyOtpModel;
+
+  VerifyEmailUpdateOtpRequested(this.verifyOtpModel);
+}
+
 class GetVehicleCategoriesRequested extends AuthEvents {}
 
 class GetVehicleMakesRequested extends AuthEvents {
@@ -59,3 +65,9 @@ class ResolveAccountRequested extends AuthEvents {
     required this.bankCode,
   });
 }
+
+class GetUserRequested extends AuthEvents {
+  GetUserRequested();
+}
+
+class SignOutRequested extends AuthEvents {}
