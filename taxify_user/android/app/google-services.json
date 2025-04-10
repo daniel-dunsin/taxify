@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "477136227844",
+    "project_id": "taxify-43666",
+    "storage_bucket": "taxify-43666.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:477136227844:android:e3ff3d4bd902b1e22c6f51",
+        "android_client_info": {
+          "package_name": "com.example.taxify_user"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAlvkPADukilLD2OC28bsPuO_wG8o-HTQk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

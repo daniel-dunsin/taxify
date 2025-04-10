@@ -88,6 +88,8 @@ export enum DBCollections {
   VehicleCategory = 'vehicle_category',
   Wallet = 'wallet',
   Address = 'address',
+  Card = 'card',
+  Transaction = 'transaction',
 }
 
 export const Images = {

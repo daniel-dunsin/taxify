@@ -1,8 +1,13 @@
+import { CardAuthorization } from '../providers/paystack/types';
 import {
   DriverStatus,
+  PaymentMethods,
   PresetAddresses,
   Role,
   TokenType,
+  TranasactionReason,
+  TransactionDirection,
+  TransactionStatus,
   VehicleType,
   VerificationDocuments,
 } from './enums';
@@ -105,6 +110,8 @@ export interface Wallet extends DbMixins, BankDetails {
   balance: number;
   currency: string;
   currency_symbol: string;
+  paystack_customer_code?: string;
+  paystack_customer_id?: string;
 }
 
 export interface Address extends DbMixins {
@@ -116,4 +123,28 @@ export interface Address extends DbMixins {
   location: Location;
   user?: User;
   name: string | PresetAddresses;
+}
+
+export interface Card extends DbMixins, CardAuthorization {
+  email: string;
+  user: User;
+  is_active: boolean;
+}
+
+export interface Transaction {
+  payment_method: PaymentMethods;
+  card: Card;
+  payment_for: TranasactionReason;
+  user: User;
+  wallet: Wallet;
+  amount: number;
+  transaction_reference: string;
+  status: TransactionStatus;
+  direction: TransactionDirection;
+  subtotal: number;
+  processing_fee: number;
+  provider_transaction_id: string;
+  refund_reason: string;
+  amount_refunded: number;
+  meta: string;
 }

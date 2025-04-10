@@ -36,9 +36,10 @@ export enum PresetAddresses {
 export enum TranasactionReason {
   FundWallet = 'fund-wallet',
   Ride = 'ride',
+  ChargeCard = 'charge-card',
 }
 
-export enum TransactionType {
+export enum TransactionDirection {
   Credit = 'Credit',
   Debit = 'Debit',
 }
@@ -47,4 +48,18 @@ export enum TransactionStatus {
   Pending = 'pending',
   Successful = 'successful',
   Failed = 'failed',
+  Refunded = 'refunded',
+}
+
+export enum PaymentMethods {
+  CARD = 'card',
+  CASH = 'cash',
+  WALLET = 'wallet',
+}
+
+export enum PaystackChannels {
+  card = 'card',
+  bank = 'bank',
+  ussd = 'ussd',
+  bank_transfer = 'bank_transfer',
 }

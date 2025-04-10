@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 ColorScheme getColorSchema(BuildContext context) {
   return Theme.of(context).colorScheme;
@@ -47,4 +48,6 @@ Future<void> requestNotificationPermission() async {
         IOSFlutterLocalNotificationsPlugin
       >()
       ?.requestPermissions(alert: true, badge: true, sound: true);
+
+  await FirebaseMessaging.instance.requestPermission(provisional: true);
 }

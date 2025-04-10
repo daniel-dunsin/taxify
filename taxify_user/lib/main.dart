@@ -11,6 +11,8 @@ import 'package:taxify_user/shared/navigation/navigation_router.dart';
 import 'package:taxify_user/shared/theme/dark_theme.dart';
 import 'package:taxify_user/shared/theme/light_theme.dart';
 import 'package:toastification/toastification.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
 void main() async {
   final WidgetsBinding widgetsBinding =
@@ -19,6 +21,8 @@ void main() async {
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
 
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
   await initApp();
   await initLocalNotifications();

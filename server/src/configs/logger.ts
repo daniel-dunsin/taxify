@@ -11,6 +11,7 @@ class Logger {
         seeders: { type: 'file', filename: 'logs/seeders.log' },
         mailer: { type: 'file', filename: 'logs/mailer.log' },
         queues: { type: 'file', filename: 'logs/queues.log' },
+        payment: { type: 'file', filename: 'logs/payment.log' },
         others: { type: 'file', filename: 'logs/misc.log' },
       },
       categories: {
@@ -18,6 +19,7 @@ class Logger {
         seeders: { appenders: ['console', 'seeders'], level: 'debug' },
         mailer: { appenders: ['console', 'mailer'], level: 'debug' },
         queues: { appenders: ['console', 'queues'], level: 'debug' },
+        paystackProvider: { appenders: ['console', 'payment'], level: 'debug' },
         default: { appenders: ['console', 'others'], level: 'debug' },
       },
     };

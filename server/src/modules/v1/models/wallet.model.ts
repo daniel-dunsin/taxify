@@ -39,6 +39,12 @@ const WalletSchema = createSchema<Wallet>({
     type: String,
     default: '₦',
   },
+  paystack_customer_code: {
+    type: String,
+  },
+  paystack_customer_id: {
+    type: String,
+  },
 });
 
 const restrictedOperations: MongooseQueryOrDocumentMiddleware[] = [

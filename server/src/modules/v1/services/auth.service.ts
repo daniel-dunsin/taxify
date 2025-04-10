@@ -29,7 +29,7 @@ import vehicleCategoryModel from '../models/vehicle-category.model';
 import vehicleGroupModel from '../models/vehicle-group.model';
 import { getVehicleGroup } from './vehicle.service';
 import verificationDocumentModel from '../models/verification-document.model';
-import walletModel from '../models/wallet.model';
+import * as walletService from './wallet-titan.service';
 
 const logger = new Logger('authService');
 
@@ -101,7 +101,7 @@ export const signUpUser = async (body: UserSignUpDto) => {
 
   await authModel.create({ user: user._id });
 
-  await walletModel.create({ user: user._id });
+  await walletService.createWallet(user);
 
   const otp = generateOtp();
   const expiresAt = add(new Date(), { hours: 3 });
@@ -195,9 +195,9 @@ export const signUpDriver = async (body: DriverSignUpDto) => {
     is_verified: true,
   });
 
-  await walletModel.create({
-    user: user._id,
-    driver: driver._id,
+  await walletService.createWallet({
+    ...user?.toObject(),
+    driver_id: driver._id,
     account_name,
     account_number,
     bank_code,
