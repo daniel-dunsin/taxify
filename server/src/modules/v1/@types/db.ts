@@ -54,7 +54,7 @@ export interface User extends DbMixins {
 export interface Driver extends DbMixins {
   user: User;
   is_verified: boolean;
-  is_online: boolean;
+  is_available: boolean;
   status: DriverStatus;
 }
 

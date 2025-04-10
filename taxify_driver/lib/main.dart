@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:taxify_driver/config/ioc.dart';
+import 'package:taxify_driver/config/notifications.dart';
 import 'package:taxify_driver/data/shared/app_model.dart';
 import 'package:taxify_driver/shared/cubits/app_cubit.dart';
 import 'package:taxify_driver/shared/navigation/navigation_router.dart';
@@ -19,7 +20,8 @@ void main() async {
 
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
-  initApp();
+  await initApp();
+  await initLocalNotifications();
 
   await getIt.get<AppCubit>().initAppTheme();
 

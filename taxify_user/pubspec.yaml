@@ -27,6 +27,7 @@ dependencies:
   toastification: ^3.0.2
   cached_network_image: ^3.4.1
   webview_flutter_plus: ^0.4.15
+  flutter_local_notifications: ^19.0.0
 
 dev_dependencies:
   flutter_test:

@@ -15,7 +15,7 @@ const DriverSchema = createSchema<Driver>({
     default: false,
   },
 
-  is_online: {
+  is_available: {
     type: Boolean,
     default: true,
   },

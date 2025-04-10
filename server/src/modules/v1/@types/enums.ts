@@ -32,3 +32,19 @@ export enum PresetAddresses {
   Home = 'home',
   Work = 'work',
 }
+
+export enum TranasactionReason {
+  FundWallet = 'fund-wallet',
+  Ride = 'ride',
+}
+
+export enum TransactionType {
+  Credit = 'Credit',
+  Debit = 'Debit',
+}
+
+export enum TransactionStatus {
+  Pending = 'pending',
+  Successful = 'successful',
+  Failed = 'failed',
+}

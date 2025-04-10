@@ -23,8 +23,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   void _requestPermissions() async {
     await grantPermission(Permission.location);
-    await grantPermission(Permission.notification);
     await grantPermission(Permission.appTrackingTransparency);
+    await requestNotificationPermission();
   }
 
   @override

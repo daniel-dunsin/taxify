@@ -6,7 +6,7 @@ class User {
   String email;
   String profilePicture;
   String driverId;
-  bool isOnline;
+  bool isAvailable;
   bool isVerified;
 
   User({
@@ -17,7 +17,7 @@ class User {
     required this.email,
     required this.profilePicture,
     required this.driverId,
-    required this.isOnline,
+    required this.isAvailable,
     required this.isVerified,
   });
 
@@ -29,7 +29,7 @@ class User {
     String? email,
     String? profilePicture,
     String? driverId,
-    bool? isOnline,
+    bool? isAvailable,
     bool? isVerified,
   }) {
     return User(
@@ -40,7 +40,7 @@ class User {
       email: email ?? this.email,
       profilePicture: profilePicture ?? this.profilePicture,
       driverId: driverId ?? this.driverId,
-      isOnline: isOnline ?? this.isOnline,
+      isAvailable: isAvailable ?? this.isAvailable,
       isVerified: isVerified ?? this.isVerified,
     );
   }
@@ -54,7 +54,7 @@ class User {
       'email': email,
       'profilePicture': profilePicture,
       'driverId': driverId,
-      'isOnline': isOnline,
+      'isAvailable': isAvailable,
       'isVerified': isVerified,
     };
   }
@@ -68,7 +68,7 @@ class User {
       email: map['email'] as String,
       profilePicture: map['profile_picture'] as String,
       driverId: map['driver_id'] as String,
-      isOnline: map['is_online'] as bool,
+      isAvailable: map['is_available'] as bool,
       isVerified: map['is_verified'] as bool,
     );
   }

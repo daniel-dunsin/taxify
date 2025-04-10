@@ -61,7 +61,7 @@ export const getUser = async (user_id: string) => {
     data = {
       ...user?.toObject(),
       driver_id: driver?._id,
-      is_online: driver?.is_online,
+      is_available: driver?.is_available,
       is_verified: driver?.is_verified,
     };
   } else {
