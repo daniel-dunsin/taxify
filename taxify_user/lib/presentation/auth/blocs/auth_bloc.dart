@@ -1,3 +1,5 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:taxify_user/config/ioc.dart';
 import 'package:taxify_user/data/auth/sign_up_model.dart';
@@ -79,6 +81,16 @@ class AuthBloc extends Bloc<AuthEvents, AuthState> {
         );
 
         await userRepository.getAndRegisterUser();
+
+        try {
+          final token = await FirebaseMessaging.instance.getToken();
+
+          await userRepository.saveDeviceToken(token!);
+        } catch (e) {
+          if (kDebugMode) {
+            print(e);
+          }
+        }
 
         emit(VerifyOtpSuccess());
       } catch (e) {

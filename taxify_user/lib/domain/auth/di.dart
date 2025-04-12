@@ -4,6 +4,6 @@ import 'package:taxify_user/shared/network/network_service.dart';
 
 void setupAuthDomain() {
   getIt.registerSingleton<AuthRepository>(
-    AuthRepository(networkService: NetworkService(hasAuth: false)),
+    AuthRepository(networkService: NetworkService(hasAuth: true)),
   );
 }

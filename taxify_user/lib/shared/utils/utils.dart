@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -50,4 +52,37 @@ Future<void> requestNotificationPermission() async {
       ?.requestPermissions(alert: true, badge: true, sound: true);
 
   await FirebaseMessaging.instance.requestPermission(provisional: true);
+}
+
+Future<void> sendNotification({
+  required String title,
+  required String body,
+  String? androidChannelId,
+  Map<String, dynamic>? data,
+  String? redirectUrl,
+}) async {
+  final AndroidNotificationDetails androidNotificationDetails =
+      AndroidNotificationDetails(
+        androidChannelId ?? "default-channel-id",
+        androidChannelId ?? "default-channel-id",
+      );
+
+  final DarwinNotificationDetails darwinNotificationDetails =
+      DarwinNotificationDetails();
+
+  final NotificationDetails notificationDetails = NotificationDetails(
+    android: androidNotificationDetails,
+    iOS: darwinNotificationDetails,
+  );
+
+  FlutterLocalNotificationsPlugin().show(
+    0,
+    title,
+    body,
+    notificationDetails,
+    payload: jsonEncode({
+      ...(data ?? {}),
+      "redirect_url": redirectUrl ?? data?["redirect_url"],
+    }),
+  );
 }

@@ -22,8 +22,8 @@ Future<void> initLocalNotifications() async {
 Future<void> _initAndroidNotificationChannels() async {
   final AndroidNotificationChannel androidNotificationChannel =
       AndroidNotificationChannel(
-        "test-channel-id",
-        "Test Channel",
+        "default-channel-id",
+        "Default Channel",
         importance: Importance.max,
       );
 

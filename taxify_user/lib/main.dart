@@ -26,6 +26,7 @@ void main() async {
 
   await initApp();
   await initLocalNotifications();
+  await initPushNotifications();
 
   await getIt.get<AppCubit>().initAppTheme();
 

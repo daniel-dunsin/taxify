@@ -1,11 +1,16 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:taxify_user/data/shared/app_model.dart';
+import 'package:taxify_user/domain/user/user_repository.dart';
 import 'package:taxify_user/shared/constants/constants.dart';
+import 'package:taxify_user/shared/network/network_toast.dart';
 import 'package:taxify_user/shared/storage/storage.dart';
 
 class AppCubit extends Cubit<AppModel> {
-  AppCubit() : super(AppModel());
+  final UserRepository userRepository;
+
+  AppCubit({required this.userRepository}) : super(AppModel());
 
   Future<void> initAppTheme() async {
     String? themeModeFromLocalStorage = await AppStorage.getString(
@@ -40,6 +45,16 @@ class AppCubit extends Cubit<AppModel> {
       return ThemeMode.system;
     } else {
       return state.themeMode!;
+    }
+  }
+
+  Future<void> saveDeviceToken(String token) async {
+    try {
+      await userRepository.saveDeviceToken(token);
+    } catch (e) {
+      if (kDebugMode) {
+        NetworkToast.handleError(e);
+      }
     }
   }
 }

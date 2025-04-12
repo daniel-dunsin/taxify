@@ -76,4 +76,13 @@ class UserRepository {
 
     return response.data;
   }
+
+  Future saveDeviceToken(String token) async {
+    final response = await networkService.put(
+      "/user/device-token",
+      data: {"deviceToken": token},
+    );
+
+    return response.data;
+  }
 }

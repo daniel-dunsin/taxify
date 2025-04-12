@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:go_router/go_router.dart';
 import 'package:taxify_user/presentation/onboarding/routes/onboarding_routes.dart';
 import 'package:taxify_user/shared/constants/constants.dart';
@@ -31,6 +32,9 @@ class NetworkInterceptor extends Interceptor {
       );
 
       if (accessToken != null) {
+        if (kDebugMode) {
+          print("Token $accessToken");
+        }
         requestOptions = requestOptions.copyWith(
           headers: {
             ...requestOptions.headers,

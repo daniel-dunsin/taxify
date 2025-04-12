@@ -5,6 +5,7 @@ import {
   deleteAddress,
   getUser,
   getUserAddresses,
+  saveDeviceToken,
   updateAddress,
   updateUser,
   updateUserEmail,
@@ -14,6 +15,7 @@ import { Role } from '../@types/enums';
 import { validationMiddleware } from '../schemas';
 import {
   createAddressSchema,
+  saveDeviceTokenSchema,
   updateAddressSchema,
   updateEmailSchema,
   updateUserSchema,
@@ -65,6 +67,13 @@ userRouter.put(
   authMiddleware([Role.User, Role.Driver]),
   validationMiddleware(verifyEmailUpdateSchema),
   verifyEmailUpdate
+);
+
+userRouter.put(
+  '/device-token',
+  authMiddleware(),
+  validationMiddleware(saveDeviceTokenSchema),
+  saveDeviceToken
 );
 
 export default userRouter;
