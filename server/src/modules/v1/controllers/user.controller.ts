@@ -3,6 +3,7 @@ import { asyncHandler } from '../../../utils';
 import * as userService from '../services/user.service';
 import {
   CreateAddressDto,
+  SaveDeviceTokenDto,
   UpdateAddressDto,
   UpdateUserDto,
   UpdateUserEmailDto,
@@ -46,4 +47,9 @@ export const updateUserEmail = asyncHandler(
 export const verifyEmailUpdate = asyncHandler(
   (req: Request<{}, {}, VerifyEmailUpdateDto>) =>
     userService.verifyEmailUpdate(req.body)
+);
+
+export const saveDeviceToken = asyncHandler(
+  (req: Request<{}, {}, SaveDeviceTokenDto>) =>
+    userService.saveDeviceToken(req.user?._id!, req.body?.deviceToken!)
 );

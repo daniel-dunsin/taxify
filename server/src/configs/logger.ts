@@ -12,6 +12,7 @@ class Logger {
         mailer: { type: 'file', filename: 'logs/mailer.log' },
         queues: { type: 'file', filename: 'logs/queues.log' },
         payment: { type: 'file', filename: 'logs/payment.log' },
+        webhook: { type: 'file', filename: 'logs/webhook.log' },
         others: { type: 'file', filename: 'logs/misc.log' },
       },
       categories: {
@@ -20,6 +21,7 @@ class Logger {
         mailer: { appenders: ['console', 'mailer'], level: 'debug' },
         queues: { appenders: ['console', 'queues'], level: 'debug' },
         paystackProvider: { appenders: ['console', 'payment'], level: 'debug' },
+        webhookService: { appenders: ['console', 'webhook'], level: 'debug' },
         default: { appenders: ['console', 'others'], level: 'debug' },
       },
     };

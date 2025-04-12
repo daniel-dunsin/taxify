@@ -65,3 +65,13 @@ export const verifyEmailUpdateSchema = Joi.object({
 export type VerifyEmailUpdateDto = Joi.extractType<
   typeof verifyEmailUpdateSchema
 >['body'];
+
+export const saveDeviceTokenSchema = Joi.object({
+  body: Joi.object({
+    deviceToken: Joi.string().required(),
+  }),
+});
+
+export type SaveDeviceTokenDto = Joi.extractType<
+  typeof saveDeviceTokenSchema
+>['body'];

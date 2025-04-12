@@ -33,10 +33,9 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
-       
+        
         <receiver android:exported="false" android:name="com.dexterous.flutterlocalnotifications.ActionBroadcastReceiver" />
-
-    </application>
+        </application>
     <!-- Required to query activities that can process text, see:
          https://developer.android.com/training/package-visibility and
          https://developer.android.com/reference/android/content/Intent#ACTION_PROCESS_TEXT.
@@ -48,6 +47,7 @@
             <data android:mimeType="text/plain"/>
         </intent>
     </queries>
+
 
     <uses-feature
         android:name="android.hardware.telephony"
@@ -133,6 +133,5 @@
     
     <!-- Permissions options for the `alarm` group -->
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
-
     
 </manifest>

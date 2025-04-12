@@ -54,6 +54,7 @@ export interface User extends DbMixins {
   role: Role;
   profile_picture: string;
   profile_picture_id: string;
+  deviceToken: string;
 }
 
 export interface Driver extends DbMixins {
@@ -138,6 +139,7 @@ export interface Transaction {
   user: User;
   wallet: Wallet;
   amount: number;
+  currency: string;
   transaction_reference: string;
   status: TransactionStatus;
   direction: TransactionDirection;

@@ -1,3 +1,4 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -32,7 +33,7 @@ Future<bool> grantPermission(Permission permission) async {
   return false;
 }
 
-Future<void> requestNotificationPermssion() async {
+Future<void> requestNotificationPermission() async {
   final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
 
@@ -46,7 +47,12 @@ Future<void> requestNotificationPermssion() async {
       .resolvePlatformSpecificImplementation<
         IOSFlutterLocalNotificationsPlugin
       >()
-      ?.requestPermissions();
+      ?.requestPermissions(alert: true, badge: true, sound: true);
+
+  await FirebaseMessaging.instance.requestPermission(provisional: true);
+  final tokens = await FirebaseMessaging.instance.getToken();
+
+  print(tokens);
 }
 
 String colorToHex(Color color) {

@@ -28,10 +28,10 @@ export interface CreateCustomer {
 }
 
 export interface InitiateRefund {
-  transaction_id: string;
+  transaction: number;
   amount?: number;
   currency: 'NGN';
-  merchant_reason: string;
+  merchant_note: string;
 }
 
 export interface CustomerResponse {
@@ -61,6 +61,7 @@ export interface CardAuthorization {
   country_code: string;
   brand: string;
   account_name: string;
+  signature: string;
 }
 
 export interface ChargeResponse {
@@ -71,6 +72,8 @@ export interface ChargeResponse {
   fees: number;
   customer: CustomerResponse;
   authorization: CardAuthorization;
+  id: number;
+  metadata: string;
 }
 
 export interface PaystackResponse<T = any> {

@@ -27,6 +27,7 @@ import { upsertToken } from './auth.service';
 import { add, isAfter } from 'date-fns';
 import { emailQueue } from '../queues/email.queue';
 import { tokenModel } from '../models/token.model';
+import pushQueue from '../queues/push-notification';
 
 const logger = new Logger('userService');
 
@@ -387,5 +388,27 @@ export const verifyEmailUpdate = async (body: VerifyEmailUpdateDto) => {
   return {
     success: true,
     msg: 'Email updated',
+  };
+};
+
+export const saveDeviceToken = async (userId: string, deviceToken: string) => {
+  const user = await userModel.findByIdAndUpdate(userId, {
+    $set: { deviceToken },
+  });
+
+  if (!user) {
+    throw new HttpError(HttpStatusCode.NotFound, 'User not found');
+  }
+
+  await pushQueue.add({
+    user_id: user?._id,
+    title: 'Hello',
+    body: 'Hi, Testing notification',
+    data: {},
+  });
+
+  return {
+    success: true,
+    msg: 'Device token saved',
   };
 };

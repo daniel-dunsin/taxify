@@ -2,7 +2,12 @@ import { NextFunction, Request, Response } from 'express';
 import { HttpError } from '../modules/v1/@types/globals';
 import Logger from '../configs/logger';
 import { Env, HttpStatusCode } from './constants';
-import { Schema, SchemaDefinition, SchemaDefinitionType } from 'mongoose';
+import {
+  Model,
+  Schema,
+  SchemaDefinition,
+  SchemaDefinitionType,
+} from 'mongoose';
 import { v4 } from 'uuid';
 import { v2 as cloudinary_v2, UploadApiOptions } from 'cloudinary';
 import path from 'path';
@@ -222,4 +227,22 @@ export const hashString = async (plain: string) => {
 
 export const verifyHash = async (plain: string, hash: string) => {
   return await argon.verify(hash, plain);
+};
+
+export const generateUniqueModelProperty = async <T = any>(
+  model: Model<T>,
+  property: keyof T,
+  prefix: string = 'TAX'
+): Promise<string> => {
+  const uniqueId = Math.floor(Math.random() * 99999999);
+
+  const propertyId = `${prefix}-${uniqueId}`;
+
+  const exists = await model.findOne({ [property as any]: propertyId });
+
+  if (exists) {
+    return await generateUniqueModelProperty(model, property, prefix);
+  }
+
+  return propertyId;
 };

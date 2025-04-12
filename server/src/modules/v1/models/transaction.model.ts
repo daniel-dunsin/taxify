@@ -33,12 +33,17 @@ const TransactionSchema = createSchema<Transaction>({
   amount: {
     type: Number,
   },
+  currency: {
+    type: String,
+    default: 'NGN',
+  },
   transaction_reference: {
     type: String,
   },
   status: {
     type: String,
     enum: Object.values(TransactionStatus),
+    default: TransactionStatus.Pending,
   },
   direction: {
     type: String,

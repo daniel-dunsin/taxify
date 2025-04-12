@@ -42,6 +42,9 @@ const CardSchema = createSchema<Card>({
   account_name: {
     type: String,
   },
+  signature: {
+    type: String,
+  },
 });
 
 const cardModel = mongoose.model(DBCollections.Card, CardSchema);

@@ -36,6 +36,10 @@ const UserSchema = createSchema<User>({
     type: String,
     enum: Object.values(Role),
   },
+
+  deviceToken: {
+    type: String,
+  },
 });
 
 const restrictedOperations: MongooseQueryOrDocumentMiddleware[] = [

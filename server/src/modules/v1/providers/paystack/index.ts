@@ -128,7 +128,7 @@ const initiateRefund = async (body: InitiateRefund) => {
 
   try {
     const response = await paystackHttpInstance.post<PaystackResponse>(
-      '/transaction/charge_authorization',
+      '/refund',
       payload
     );
 
@@ -142,7 +142,8 @@ const initiateRefund = async (body: InitiateRefund) => {
     logger.log(`Refund initiated ${JSON.stringify(response.data.data)}`);
 
     return response?.data?.data;
-  } catch (error) {
+  } catch (error: any) {
+    console.log(error?.response?.data);
     logger.error(JSON.stringify(error));
     throw error;
   }

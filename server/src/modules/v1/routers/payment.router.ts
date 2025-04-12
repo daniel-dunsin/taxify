@@ -1,5 +1,9 @@
 import { Router } from 'express';
-import { getBanks, lookupAccount } from '../controllers/payment.controller';
+import {
+  getBanks,
+  lookupAccount,
+  processPaystackWebhook,
+} from '../controllers/payment.controller';
 import { validationMiddleware } from '../schemas';
 import { lookupAccountSchema } from '../schemas/payment.schema';
 
@@ -11,5 +15,6 @@ paymentRouter.get(
   validationMiddleware(lookupAccountSchema),
   lookupAccount
 );
+paymentRouter.post('/webhook/paystack', processPaystackWebhook);
 
 export default paymentRouter;

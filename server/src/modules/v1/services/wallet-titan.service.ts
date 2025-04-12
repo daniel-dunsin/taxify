@@ -2,7 +2,18 @@ import { HttpStatusCode } from '../../../utils/constants';
 import { BankDetails, User } from '../@types/db';
 import { HttpError } from '../@types/globals';
 import walletModel from '../models/wallet.model';
+import cardModel from '../models/card.model';
+import transactionModel from '../models/transaction.model';
+import {
+  PaymentMethods,
+  PaystackChannels,
+  TranasactionReason,
+  TransactionDirection,
+} from '../@types/enums';
+import * as walletService from './wallet-titan.service';
+import { generateUniqueModelProperty } from '../../../utils';
 import paystackProvider from '../providers/paystack';
+import { userModel } from '../models/user.model';
 
 export const getWallet = async (user_id: string) => {
   const data = await walletModel
@@ -53,4 +64,56 @@ export const createWallet = async (
     paystack_customer_code: paystack_customer?.customer_code,
     paystack_customer_id: paystack_customer?.id,
   });
+};
+
+export const createCard = async (userId: string) => {
+  const user = await userModel.findById(userId);
+
+  if (!user) throw new HttpError(HttpStatusCode.NotFound, 'User not found');
+
+  const existing_card = await cardModel.findOne({
+    user: userId,
+    is_active: true,
+  });
+
+  if (existing_card) {
+    throw new HttpError(HttpStatusCode.NotFound, 'Card not found');
+  }
+
+  const wallet = await walletService.getWallet(userId);
+  const card_charge_amount = 50;
+  const transaction_reference = await generateUniqueModelProperty(
+    transactionModel,
+    'transaction_reference',
+    'TRX'
+  );
+
+  const transaction = await transactionModel.create({
+    payment_method: PaymentMethods.CARD,
+    payment_for: TranasactionReason.ChargeCard,
+    user: userId,
+    wallet: wallet?.data?._id,
+    amount: 50,
+    currency: 'NGN',
+    transaction_reference,
+    direction: TransactionDirection.Debit,
+    subtotal: card_charge_amount,
+    processing_fee: 0,
+  });
+
+  const data = await paystackProvider.initiateCharge({
+    amount: card_charge_amount,
+    fee_inclusive: false,
+    email: user?.email,
+    reference: transaction_reference,
+    metadata: JSON.stringify(transaction),
+    channels: [PaystackChannels.card],
+    currency: 'NGN',
+  });
+
+  return {
+    success: true,
+    msg: 'Charge initiated',
+    data,
+  };
 };
