@@ -9,7 +9,6 @@ enum ToastType { success, error, info }
 
 class NetworkToast {
   static void handleError(dynamic error) {
-    print(error);
     dynamic errorMessage = "Something went wrong";
 
     if (error?.runtimeType.toString() == "String") {

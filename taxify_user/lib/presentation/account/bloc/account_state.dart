@@ -28,3 +28,33 @@ class UpdateProfilePictureLoading extends AccountState {}
 class UpdateProfilePictureSuccess extends AccountState {}
 
 class UpdateProfilePictureFailed extends AccountState {}
+
+class CreateAddressLoading extends AccountState {}
+
+class CreateAddressSuccess extends AccountState {}
+
+class CreateAddressFailed extends AccountState {}
+
+class GetAddressesLoading extends AccountState {}
+
+class GetAddressesSuccess extends AccountState {
+  final List<AddressModel> others;
+  final AddressModel? home;
+  final AddressModel? work;
+
+  GetAddressesSuccess({required this.others, this.home, this.work});
+}
+
+class GetAddressesFailed extends AccountState {}
+
+class UpdateAddressLoading extends AccountState {}
+
+class UpdateAddressSuccess extends AccountState {}
+
+class UpdateAddressFailed extends AccountState {}
+
+class DeleteAddressLoading extends AccountState {}
+
+class DeleteAddressSuccess extends AccountState {}
+
+class DeleteAddressFailed extends AccountState {}

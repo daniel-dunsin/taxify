@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:taxify_user/presentation/account/pages/account_page.dart';
+import 'package:taxify_user/presentation/account/pages/add_location_page.dart';
 import 'package:taxify_user/presentation/account/pages/change_email.dart';
 import 'package:taxify_user/presentation/account/pages/change_name_page.dart';
 import 'package:taxify_user/presentation/account/pages/change_phone_number.dart';
 import 'package:taxify_user/presentation/account/pages/change_profile_picture.dart';
+import 'package:taxify_user/presentation/account/pages/save_custom_location.dart';
+import 'package:taxify_user/presentation/account/pages/saved_locations.dart';
 import 'package:taxify_user/presentation/account/pages/wallet_page.dart';
 import 'package:taxify_user/presentation/account/routes/account_routes.dart';
 import 'package:taxify_user/presentation/activity/pages/activity_page.dart';
@@ -166,6 +169,45 @@ final goRouter = GoRouter(
       name: AccountRoutes.changeProfilePicture,
       pageBuilder: (context, state) {
         return MaterialPage(child: ChangeProfilePicturePage());
+      },
+    ),
+
+    GoRoute(
+      path: AccountRoutes.addLocation,
+      name: AccountRoutes.addLocation,
+      pageBuilder: (context, state) {
+        final Map? extra = state.extra as Map?;
+        return MaterialPage(
+          child: AddLocationPage(
+            isUpdating: extra?["isUpdating"] ?? false,
+            address: extra?["address"],
+            presetName: extra?["presetName"],
+            onSelect: extra?["onSelect"],
+          ),
+        );
+      },
+    ),
+
+    GoRoute(
+      path: AccountRoutes.saveCustomLocation,
+      name: AccountRoutes.saveCustomLocation,
+      pageBuilder: (context, state) {
+        final Map? extra = state.extra as Map?;
+        return MaterialPage(
+          child: SaveCustomLocationPage(
+            isUpdating: extra?["isUpdating"],
+            address: extra?["address"],
+            presetName: extra?["presetName"],
+          ),
+        );
+      },
+    ),
+
+    GoRoute(
+      path: AccountRoutes.savedLocations,
+      name: AccountRoutes.savedLocations,
+      pageBuilder: (context, state) {
+        return MaterialPage(child: SavedLocationsPage());
       },
     ),
   ],

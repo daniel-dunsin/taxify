@@ -19,8 +19,11 @@ class AppTextInput extends StatelessWidget {
   final FormFieldValidator? validator;
   final TextInputType? keyboardType;
   final int? maxLength;
+  final EdgeInsets? contentPadding;
   final bool disabled;
   final bool loading;
+  final bool underline;
+  final double? labelVerticalGap;
 
   const AppTextInput({
     super.key,
@@ -38,8 +41,11 @@ class AppTextInput extends StatelessWidget {
     this.validator,
     this.keyboardType,
     this.maxLength,
+    this.contentPadding,
+    this.labelVerticalGap,
     this.disabled = false,
     this.loading = false,
+    this.underline = false,
   });
 
   @override
@@ -56,15 +62,17 @@ class AppTextInput extends StatelessWidget {
                   context,
                 ).bodyMedium?.copyWith(fontWeight: FontWeight.w600),
               ),
-              SizedBox(height: 10),
+              SizedBox(height: labelVerticalGap ?? 10),
             ]),
         TextFormField(
           validator: validator,
           controller: controller,
           cursorColor:
-              getColorSchema(context).brightness == Brightness.light
-                  ? AppColors.dark
-                  : AppColors.accent,
+              underline
+                  ? getColorSchema(context).onPrimary
+                  : (getColorSchema(context).brightness == Brightness.light
+                      ? AppColors.dark
+                      : AppColors.accent),
           showCursor: true,
           keyboardType: keyboardType,
           style: TextStyle(fontWeight: FontWeight.w500),
@@ -79,53 +87,90 @@ class AppTextInput extends StatelessWidget {
           }) {
             return null;
           },
-          decoration: InputDecoration(
-            enabled: !disabled && !loading,
-            hintText: hintText,
-            hintStyle: getTextTheme(context).labelSmall?.copyWith(fontSize: 15),
-            suffixIcon: suffixIcon,
-            suffixIconColor:
-                sufficIconColor ?? getColorSchema(context).onPrimary,
-            icon: icon,
-            iconColor: iconColor,
-            prefixIcon: prefixIcon,
-            prefixIconColor: prefixIconColor,
-            filled: true,
-            fillColor:
-                fillColor ??
-                (checkLightMode(context)
-                    ? getColorSchema(context).primary
-                    : AppColors.darkGray),
-            border: OutlineInputBorder(
-              borderSide: BorderSide(width: 1.5, color: Colors.transparent),
-              borderRadius: BorderRadius.circular(6),
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(width: 1.5, color: Colors.transparent),
-              borderRadius: BorderRadius.circular(6),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(
-                width: 1.5,
-                color:
-                    getColorSchema(context).brightness == Brightness.light
-                        ? AppColors.dark
-                        : AppColors.accent,
-              ),
-              borderRadius: BorderRadius.circular(6),
-            ),
-            errorBorder: OutlineInputBorder(
-              borderSide: BorderSide(width: 1.5, color: AppColors.error),
-              borderRadius: BorderRadius.circular(6),
-            ),
-            focusedErrorBorder: OutlineInputBorder(
-              borderSide: BorderSide(width: 1.5, color: AppColors.error),
-              borderRadius: BorderRadius.circular(6),
-            ),
-            errorStyle: TextStyle(color: AppColors.error, fontSize: 12),
-          ),
+          decoration: getInputDecorator(context),
         ),
       ],
+    );
+  }
+
+  InputDecoration getInputDecorator(BuildContext context) {
+    return InputDecoration(
+      contentPadding: contentPadding,
+      enabled: !disabled && !loading,
+      hintText: hintText,
+      hintStyle: getTextTheme(context).labelSmall?.copyWith(fontSize: 15),
+      suffixIcon: suffixIcon,
+      suffixIconColor: sufficIconColor ?? getColorSchema(context).onPrimary,
+      icon: icon,
+      iconColor: iconColor,
+      prefixIcon: prefixIcon,
+      prefixIconColor: prefixIconColor,
+      filled: true,
+      fillColor:
+          fillColor ??
+          (checkLightMode(context)
+              ? getColorSchema(context).primary
+              : AppColors.darkGray),
+      border:
+          underline
+              ? UnderlineInputBorder(
+                borderSide: BorderSide(width: 1.5, color: Colors.transparent),
+                borderRadius: BorderRadius.circular(0),
+              )
+              : OutlineInputBorder(
+                borderSide: BorderSide(width: 1.5, color: Colors.transparent),
+                borderRadius: BorderRadius.circular(6),
+              ),
+      enabledBorder:
+          underline
+              ? UnderlineInputBorder(
+                borderSide: BorderSide(width: 1.5, color: Colors.transparent),
+                borderRadius: BorderRadius.circular(0),
+              )
+              : OutlineInputBorder(
+                borderSide: BorderSide(width: 1.5, color: Colors.transparent),
+                borderRadius: BorderRadius.circular(6),
+              ),
+      focusedBorder:
+          underline
+              ? UnderlineInputBorder(
+                borderSide: BorderSide(
+                  width: 1.5,
+                  color: getColorSchema(context).onPrimary,
+                ),
+                borderRadius: BorderRadius.circular(0),
+              )
+              : OutlineInputBorder(
+                borderSide: BorderSide(
+                  width: 1.5,
+                  color:
+                      getColorSchema(context).brightness == Brightness.light
+                          ? AppColors.dark
+                          : AppColors.accent,
+                ),
+                borderRadius: BorderRadius.circular(6),
+              ),
+      errorBorder:
+          underline
+              ? UnderlineInputBorder(
+                borderSide: BorderSide(width: 1.5, color: AppColors.error),
+                borderRadius: BorderRadius.circular(0),
+              )
+              : OutlineInputBorder(
+                borderSide: BorderSide(width: 1.5, color: AppColors.error),
+                borderRadius: BorderRadius.circular(6),
+              ),
+      focusedErrorBorder:
+          underline
+              ? UnderlineInputBorder(
+                borderSide: BorderSide(width: 1.5, color: AppColors.error),
+                borderRadius: BorderRadius.circular(0),
+              )
+              : OutlineInputBorder(
+                borderSide: BorderSide(width: 1.5, color: AppColors.error),
+                borderRadius: BorderRadius.circular(6),
+              ),
+      errorStyle: TextStyle(color: AppColors.error, fontSize: 12),
     );
   }
 }

@@ -121,6 +121,9 @@ export interface Address extends DbMixins {
   country: string;
   country_iso?: string;
   street_address: string;
+  place_id: string;
+  place_full_text: string;
+  place_description: string;
   location: Location;
   user?: User;
   name: string | PresetAddresses;

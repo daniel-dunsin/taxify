@@ -6,8 +6,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:taxify_user/config/ioc.dart';
 import 'package:taxify_user/data/shared/account_settings_tile_model.dart';
+import 'package:taxify_user/data/user/address_model.dart';
 import 'package:taxify_user/data/user/user_model.dart';
 import 'package:taxify_user/presentation/account/pages/profile_page.dart';
+import 'package:taxify_user/presentation/account/routes/account_routes.dart';
 import 'package:taxify_user/presentation/account/widgets/appearance_bottom_sheet.dart';
 import 'package:taxify_user/presentation/auth/blocs/auth_bloc.dart';
 import 'package:taxify_user/presentation/onboarding/routes/onboarding_routes.dart';
@@ -36,22 +38,60 @@ class SettingsPageUtil {
 
   static List<AccountSettingsTileModel> getSettingsTile(BuildContext context) {
     ThemeMode themeMode = getIt.get<AppCubit>().appThemeMode;
+    final User user = getIt.get<User>();
 
     return [
       AccountSettingsTileModel(
         icon: Icons.home,
-        title: "Add Home",
-        onClick: null,
+        title: user.homeAddress == null ? "Add Home" : "Home",
+        subtitle: user.homeAddress?.placeFullText,
+        onClick: () {
+          if (user.homeAddress == null) {
+            GoRouter.of(context).pushNamed(
+              AccountRoutes.addLocation,
+              extra: {"presetName": PresetAddresses.home},
+            );
+          } else {
+            GoRouter.of(context).pushNamed(
+              AccountRoutes.addLocation,
+              extra: {
+                "isUpdating": true,
+                "address": user.homeAddress,
+                "presetName": PresetAddresses.home,
+              },
+            );
+          }
+        },
       ),
       AccountSettingsTileModel(
         icon: Icons.cases_rounded,
-        title: "Add Work",
-        onClick: null,
+        title: user.workAddress == null ? "Add Work" : "Work",
+        subtitle: user.workAddress?.placeFullText,
+        onClick: () {
+          if (user.workAddress == null) {
+            GoRouter.of(context).pushNamed(
+              AccountRoutes.addLocation,
+              extra: {"presetName": PresetAddresses.work},
+            );
+          } else {
+            GoRouter.of(context).pushNamed(
+              AccountRoutes.addLocation,
+              extra: {
+                "isUpdating": true,
+                "address": user.workAddress,
+                "presetName": PresetAddresses.work,
+              },
+            );
+          }
+        },
       ),
       AccountSettingsTileModel(
         icon: Icons.location_pin,
         title: "Saved Locations",
         subtitle: "Manage saved locations",
+        onClick: () {
+          GoRouter.of(context).pushNamed(AccountRoutes.savedLocations);
+        },
       ),
       AccountSettingsTileModel(
         icon: Icons.lock,
@@ -259,10 +299,6 @@ class _SettingsPageState extends State<SettingsPage>
               Icons.chevron_right,
               color: getColorSchema(context).onSecondary,
             ),
-          ),
-          Divider(
-            thickness: i == tiles.length - 1 ? 1.5 : .3,
-            color: getColorSchema(context).onSecondary,
           ),
         ],
 

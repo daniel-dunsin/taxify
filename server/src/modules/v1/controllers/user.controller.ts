@@ -22,7 +22,11 @@ export const createAddress = asyncHandler(
 
 export const updateAddress = asyncHandler(
   (req: Request<UpdateAddressDto['params'], {}, UpdateAddressDto['body']>) => {
-    return userService.updateAddress(req.params?.address_id!, req.body);
+    return userService.updateAddress(
+      req.user?._id!,
+      req.params?.address_id!,
+      req.body
+    );
   }
 );
 

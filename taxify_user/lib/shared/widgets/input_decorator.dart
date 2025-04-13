@@ -15,10 +15,13 @@ class AppTextInputDecorator extends StatelessWidget {
   final Color? prefixIconColor;
   final Widget? icon;
   final Color? iconColor;
+  final Color? fillColor;
   final bool disabled;
   final bool loading;
   final VoidCallback? onClick;
   final VoidCallback? onCancel;
+  final EdgeInsets? contentPadding;
+  final double? labelVerticalGap;
 
   const AppTextInputDecorator({
     super.key,
@@ -32,8 +35,11 @@ class AppTextInputDecorator extends StatelessWidget {
     this.prefixIconColor,
     this.icon,
     this.iconColor,
+    this.fillColor,
     this.onClick,
     this.onCancel,
+    this.contentPadding,
+    this.labelVerticalGap,
     this.disabled = false,
     this.loading = false,
   });
@@ -52,7 +58,7 @@ class AppTextInputDecorator extends StatelessWidget {
                   context,
                 ).bodyMedium?.copyWith(fontWeight: FontWeight.w600),
               ),
-              SizedBox(height: 10),
+              SizedBox(height: labelVerticalGap ?? 10),
             ]),
         GestureDetector(
           onTap:
@@ -65,6 +71,7 @@ class AppTextInputDecorator extends StatelessWidget {
                   },
           child: InputDecorator(
             decoration: InputDecoration(
+              contentPadding: contentPadding,
               enabled: !disabled && !loading,
               suffixIcon:
                   suffixIcon ??
@@ -104,9 +111,10 @@ class AppTextInputDecorator extends StatelessWidget {
               prefixIconColor: prefixIconColor,
               filled: true,
               fillColor:
-                  checkLightMode(context)
+                  fillColor ??
+                  (checkLightMode(context)
                       ? getColorSchema(context).primary
-                      : AppColors.darkGray,
+                      : AppColors.darkGray),
               border: OutlineInputBorder(
                 borderSide: BorderSide(width: 1.5, color: Colors.transparent),
                 borderRadius: BorderRadius.circular(6),
@@ -137,11 +145,16 @@ class AppTextInputDecorator extends StatelessWidget {
             ),
             child: Row(
               children: [
-                Text(
-                  loading ? "Loading..." : value ?? hintText ?? "",
-                  style:
-                      hintStyle ??
-                      getTextTheme(context).labelSmall?.copyWith(fontSize: 15),
+                Expanded(
+                  child: Text(
+                    loading ? "Loading..." : value ?? hintText ?? "",
+                    style:
+                        hintStyle ??
+                        getTextTheme(
+                          context,
+                        ).labelSmall?.copyWith(fontSize: 15),
+                    overflow: TextOverflow.ellipsis,
+                  ),
                 ),
                 const SizedBox(width: 10),
               ],

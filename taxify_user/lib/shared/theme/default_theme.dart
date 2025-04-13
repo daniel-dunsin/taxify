@@ -42,6 +42,9 @@ final defaultTheme = ThemeData(
     foregroundColor: AppColors.darkGray,
   ),
   primaryColor: AppColors.light,
+  splashColor: Colors.transparent,
+  splashFactory: NoSplash.splashFactory,
+  highlightColor: Colors.transparent,
   textTheme: TextTheme(
     displayLarge: TextStyle(
       fontSize: 42.sp,

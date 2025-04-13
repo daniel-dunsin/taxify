@@ -6,4 +6,7 @@ class AccountRoutes {
   static String changeNumber = "/account/change-phonenumber";
   static String changeName = "/account/change-name";
   static String changeProfilePicture = "/account/change-profilePicture";
+  static String addLocation = "/account/add-location";
+  static String saveCustomLocation = "/account/save-custom-location";
+  static String savedLocations = "/account/saved-locations";
 }

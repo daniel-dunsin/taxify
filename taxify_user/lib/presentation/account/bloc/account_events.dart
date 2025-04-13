@@ -27,3 +27,23 @@ class UpdateProfilePictureRequested extends AccountEvents {
 
   UpdateProfilePictureRequested({required this.profilePicture});
 }
+
+class CreateAddressRequested extends AccountEvents {
+  final AddressModel address;
+
+  CreateAddressRequested(this.address);
+}
+
+class UpdateAddressRequested extends AccountEvents {
+  final AddressModel address;
+
+  UpdateAddressRequested(this.address);
+}
+
+class DeleteAddressRequested extends AccountEvents {
+  final String addressId;
+
+  DeleteAddressRequested({required this.addressId});
+}
+
+class GetAddressesRequested extends AccountEvents {}

@@ -26,6 +26,15 @@ export const AddressSchema = createSchema<Address>({
   street_address: {
     type: String,
   },
+  place_id: {
+    type: String,
+  },
+  place_description: {
+    type: String,
+  },
+  place_full_text: {
+    type: String,
+  },
   location: {
     type: {
       type: String,

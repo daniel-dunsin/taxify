@@ -1,11 +1,28 @@
 enum PresetAddresses { home, work }
 
+class LatLng {
+  final double? latitude;
+  final double? longitude;
+
+  const LatLng(this.latitude, this.longitude);
+
+  @override
+  String toString() => 'LatLng($latitude, $longitude)';
+
+  List<double?> toJson() => [longitude, latitude];
+
+  factory LatLng.fromJson(List<dynamic> json) {
+    // monogo db sotres, lang lat
+    return LatLng(json[1] as double?, json[0] as double?);
+  }
+}
+
 class LocationModel {
   String type;
-  List<double> coordinates;
+  LatLng coordinates;
   LocationModel({required this.type, required this.coordinates});
 
-  LocationModel copyWith({String? type, List<double>? coordinates}) {
+  LocationModel copyWith({String? type, LatLng? coordinates}) {
     return LocationModel(
       type: type ?? this.type,
       coordinates: coordinates ?? this.coordinates,
@@ -13,25 +30,28 @@ class LocationModel {
   }
 
   Map<String, dynamic> toMap() {
-    return <String, dynamic>{'type': type, 'coordinates': coordinates};
+    return <String, dynamic>{'type': type, 'coordinates': coordinates.toJson()};
   }
 
   factory LocationModel.fromMap(Map<String, dynamic> map) {
     return LocationModel(
       type: map['type'] as String,
-      coordinates: List<double>.from((map['coordinates'] as List<dynamic>)),
+      coordinates: LatLng.fromJson(map["coordinates"]),
     );
   }
 }
 
 class AddressModel {
-  String id;
+  String? id;
   String? country;
   String? countryIso;
   String? state;
   String? city;
   String? streetAddress;
   String? name;
+  String? placeId;
+  String? placeDescription;
+  String? placeFullText;
   bool isHomeAddress;
   bool isWorkAddress;
   LocationModel? location;
@@ -44,22 +64,63 @@ class AddressModel {
     this.streetAddress,
     this.name,
     this.location,
-    required this.id,
+    this.placeId,
+    this.placeDescription,
+    this.placeFullText,
+    this.id,
     required this.isHomeAddress,
     required this.isWorkAddress,
   });
+
+  AddressModel copyWith({
+    String? id,
+    String? country,
+    String? countryIso,
+    String? state,
+    String? city,
+    String? streetAddress,
+    String? name,
+    String? placeId,
+    String? placeDescription,
+    String? placeFullText,
+    bool? isHomeAddress,
+    bool? isWorkAddress,
+    LocationModel? location,
+  }) {
+    return AddressModel(
+      id: id ?? this.id,
+      country: country ?? this.country,
+      countryIso: countryIso ?? this.countryIso,
+      state: state ?? this.state,
+      city: city ?? this.city,
+      streetAddress: streetAddress ?? this.streetAddress,
+      name: name ?? this.name,
+      placeId: placeId ?? this.placeId,
+      placeDescription: placeDescription ?? this.placeDescription,
+      placeFullText: placeFullText ?? this.placeFullText,
+      isHomeAddress: isHomeAddress ?? this.isHomeAddress,
+      isWorkAddress: isWorkAddress ?? this.isWorkAddress,
+      location: location ?? this.location,
+    );
+  }
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'country': country,
       'state': state,
       'city': city,
-      'streetAddress': streetAddress,
-      'name': name,
-      'isHomeAddress': isHomeAddress,
-      'isWorkAddress': isWorkAddress,
-      'location': location?.toMap(),
-      "countryIso": countryIso,
+      'street_address': streetAddress,
+      'name':
+          isHomeAddress
+              ? PresetAddresses.home.name
+              : isWorkAddress
+              ? PresetAddresses.work.name
+              : name,
+      'location_coordinates': location?.coordinates.toJson(),
+      "country_iso": countryIso ?? "",
+      "place_id": placeId,
+      "place_full_text": placeFullText,
+      "place_description": placeDescription,
     };
   }
 
@@ -81,6 +142,22 @@ class AddressModel {
               ? LocationModel.fromMap(map["location"])
               : null,
       countryIso: map["country_iso"],
+      placeId: map["place_id"],
+      placeFullText: map["place_full_text"],
+      placeDescription: map["place_description"],
     );
+  }
+
+  String format() {
+    final parts =
+        [
+          streetAddress,
+          city,
+          state,
+          country,
+          countryIso,
+        ].where((part) => part != null && part.trim().isNotEmpty).toList();
+
+    return placeFullText ?? parts.join(', ');
   }
 }

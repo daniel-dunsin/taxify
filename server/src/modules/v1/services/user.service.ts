@@ -88,6 +88,9 @@ export const createAddress = async (
     location_coordinates,
     name,
     country_iso,
+    place_id,
+    place_description,
+    place_full_text,
   } = body!;
 
   if (!isEmpty(name)) {
@@ -95,6 +98,7 @@ export const createAddress = async (
       name: {
         $regex: new RegExp(`^${name}$`, 'i'),
       },
+      user: user_id,
     });
 
     if (saved_address) {
@@ -112,6 +116,9 @@ export const createAddress = async (
     city,
     street_address,
     name,
+    place_id,
+    place_description,
+    place_full_text,
     location: {
       type: 'Point',
       coordinates: location_coordinates,
@@ -127,74 +134,29 @@ export const createAddress = async (
 };
 
 export const getUserAddresses = async (user_id: string) => {
-  const data = await addressModel
-    .aggregate([
-      {
-        $match: { user: user_id },
-      },
-      {
-        $project: {
-          user: 0,
-          createdAt: 0,
-          updatedAt: 0,
-        },
-      },
-      {
-        $group: {
-          _id: null,
-          home: {
-            $first: {
-              $cond: {
-                if: {
-                  $eq: ['$name', PresetAddresses.Home],
-                },
-                then: '$$ROOT',
-                else: null,
-              },
-            },
-          },
-          work: {
-            $first: {
-              $cond: {
-                if: {
-                  $eq: ['$name', PresetAddresses.Work],
-                },
-                then: '$$ROOT',
-                else: null,
-              },
-            },
-          },
-          others: {
-            $push: {
-              $cond: [
-                {
-                  $and: [
-                    { $ne: ['$name', PresetAddresses.Home] },
-                    { $ne: ['$name', PresetAddresses.Work] },
-                  ],
-                },
-                '$$ROOT',
-                '$$REMOVE',
-              ],
-            },
-          },
-        },
-      },
-      {
-        $project: {
-          home: 1,
-          work: 1,
-          others: 1,
-          _id: 0,
-        },
-      },
-    ])
-    .then((r) => r?.[0] || { home: null, work: null, others: [] });
+  const [home, work, others] = await Promise.all([
+    addressModel
+      .findOne({ user: user_id, name: PresetAddresses.Home })
+      .select('-user -updatedAt -createdAt'),
+    addressModel
+      .findOne({ user: user_id, name: PresetAddresses.Work })
+      .select('-user -updatedAt -createdAt'),
+    addressModel
+      .find({
+        user: user_id,
+        name: { $nin: [PresetAddresses.Home, PresetAddresses.Work] },
+      })
+      .select('-user -updatedAt -createdAt'),
+  ]);
 
   return {
     success: true,
     msg: "User's addresses retrieved successfully",
-    data,
+    data: {
+      home,
+      work,
+      others,
+    },
   };
 };
 
@@ -210,6 +172,7 @@ export const deleteAddress = async (address_id: string) => {
 };
 
 export const updateAddress = async (
+  user_id: string,
   address_id: string,
   body: UpdateAddressDto['body']
 ) => {
@@ -221,12 +184,16 @@ export const updateAddress = async (
     location_coordinates = null,
     country_iso = null,
     name = null,
+    place_id = null,
+    place_description = null,
+    place_full_text = null,
   } = body!;
 
   if (name) {
     const existing_address = await addressModel.findOne({
       name,
       _id: { $ne: address_id },
+      user: user_id,
     });
 
     if (existing_address)
@@ -246,6 +213,9 @@ export const updateAddress = async (
         country,
         country_iso,
         name,
+        place_id,
+        place_description,
+        place_full_text,
         ...(location_coordinates && {
           location: {
             type: 'Point',

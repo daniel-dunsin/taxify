@@ -1,6 +1,6 @@
-import 'package:flutter/foundation.dart';
 import 'package:taxify_user/config/ioc.dart';
 import 'package:taxify_user/data/auth/verify_otp_model.dart';
+import 'package:taxify_user/data/user/address_model.dart';
 import 'package:taxify_user/data/user/user_model.dart';
 import 'package:taxify_user/shared/network/network_service.dart';
 
@@ -82,6 +82,36 @@ class UserRepository {
       "/user/device-token",
       data: {"deviceToken": token},
     );
+
+    return response.data;
+  }
+
+  Future createAddress(AddressModel address) async {
+    final response = await networkService.post(
+      "/user/address",
+      data: address.toMap(),
+    );
+
+    return response.data;
+  }
+
+  Future getAddresses() async {
+    final response = await networkService.get("/user/address");
+
+    return response.data;
+  }
+
+  Future updateAddress(AddressModel address) async {
+    final response = await networkService.put(
+      "/user/address/${address.id}",
+      data: address.toMap(),
+    );
+
+    return response.data;
+  }
+
+  Future deleteAddress(String addressId) async {
+    final response = await networkService.delete("/user/address/$addressId");
 
     return response.data;
   }

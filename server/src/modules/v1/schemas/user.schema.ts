@@ -3,13 +3,16 @@ import { coordinatesSchema } from './defaults.schema';
 
 export const createAddressSchema = Joi.object({
   body: Joi.object({
-    name: Joi.string().optional(),
+    name: Joi.string().optional().allow('', null),
     state: Joi.string().required(),
-    city: Joi.string().optional(),
-    street_address: Joi.string().optional(),
+    city: Joi.string().optional().allow('', null),
+    street_address: Joi.string().optional().allow('', null),
     country: Joi.string().required(),
-    country_iso: Joi.string().optional(),
+    country_iso: Joi.string().optional().allow('', null),
     location_coordinates: coordinatesSchema,
+    place_id: Joi.string().optional().allow('', null),
+    place_description: Joi.string().optional().allow('', null),
+    place_full_text: Joi.string().optional().allow('', null),
   }),
 });
 
@@ -19,16 +22,19 @@ export type CreateAddressDto = Joi.extractType<
 
 export const updateAddressSchema = Joi.object({
   params: Joi.object({
-    address_id: Joi.string().optional(),
+    address_id: Joi.string().optional().allow('', null),
   }),
   body: Joi.object({
-    name: Joi.string().optional(),
-    state: Joi.string().optional(),
-    city: Joi.string().optional(),
-    street_address: Joi.string().optional(),
-    country: Joi.string().optional(),
-    country_iso: Joi.string().optional(),
+    name: Joi.string().optional().allow('', null),
+    state: Joi.string().optional().allow('', null),
+    city: Joi.string().optional().allow('', null),
+    street_address: Joi.string().optional().allow('', null),
+    country: Joi.string().optional().allow('', null),
+    country_iso: Joi.string().optional().allow('', null),
     location_coordinates: coordinatesSchema,
+    place_id: Joi.string().optional().allow('', null),
+    place_description: Joi.string().optional().allow('', null),
+    place_full_text: Joi.string().optional().allow('', null),
   }),
 });
 
@@ -36,10 +42,10 @@ export type UpdateAddressDto = Joi.extractType<typeof updateAddressSchema>;
 
 export const updateUserSchema = Joi.object({
   body: Joi.object({
-    firstName: Joi.string().optional(),
-    lastName: Joi.string().optional(),
-    profilePicture: Joi.string().optional(),
-    phoneNumber: Joi.string().optional(),
+    firstName: Joi.string().optional().allow('', null),
+    lastName: Joi.string().optional().allow('', null),
+    profilePicture: Joi.string().optional().allow('', null),
+    phoneNumber: Joi.string().optional().allow('', null),
   }),
 });
 

@@ -23,6 +23,9 @@ class AppConstants {
         ? "http://10.0.2.2:3001/api/v1"
         : "http://localhost:3001/api/v1";
   }
+
+  static const String googleMapApiKey =
+      "AIzaSyCjEIyjAg7TSZd8qUbecNz3SSeTiN_iSBU";
 }
 
 class AppStorageConstants {
