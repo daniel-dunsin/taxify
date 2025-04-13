@@ -9,7 +9,7 @@ import 'package:taxify_user/presentation/account/routes/account_routes.dart';
 import 'package:taxify_user/shared/constants/constants.dart';
 import 'package:taxify_user/shared/extenstions/extensions.dart';
 import 'package:taxify_user/shared/utils/utils.dart';
-import 'package:taxify_user/shared/widgets/back_button%20copy.dart';
+import 'package:taxify_user/shared/widgets/back_button.dart';
 import 'package:taxify_user/shared/widgets/dialog_loader.dart';
 
 class SavedLocationsPage extends StatefulWidget {
@@ -92,7 +92,11 @@ class _SavedLocationsPageState extends State<SavedLocationsPage> {
               children: [
                 AppBackButton(size: 25),
                 IconButton(
-                  icon: Icon(Icons.add, size: 25),
+                  icon: Icon(
+                    Icons.add,
+                    size: 25,
+                    color: getColorSchema(context).onPrimary,
+                  ),
                   onPressed: () {
                     GoRouter.of(context).pushNamed(AccountRoutes.addLocation);
                   },
