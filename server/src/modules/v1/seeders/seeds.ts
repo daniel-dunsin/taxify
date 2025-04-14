@@ -1,5 +1,9 @@
-import { VehicleCategory, VehicleGroup } from '../@types/db';
-import { VehicleType } from '../@types/enums';
+import { PaymentMethod, VehicleCategory, VehicleGroup } from '../@types/db';
+import {
+  PaystackChannels,
+  VehicleType,
+  PaymentMethods as PaymentMethodsEnum,
+} from '../@types/enums';
 
 export const VehicleCategories: Omit<
   VehicleCategory,
@@ -50,5 +54,56 @@ export const VehicleGroups: Omit<
     min_fare: 6000,
     rate_per_km: 1500,
     description: 'Large Vehicles for Groups & Comfort',
+  },
+];
+
+export const PaymentMethods: Omit<
+  PaymentMethod,
+  '_id' | 'createdAt' | 'updatedAt'
+>[] = [
+  {
+    name: PaymentMethodsEnum.CASH,
+    description:
+      "Your driver's phone will show you the amount to pay at the end of the trip",
+    icon: '',
+    is_for_ride: true,
+    is_for_topup: false,
+    is_default: true,
+  },
+  {
+    name: PaymentMethodsEnum.USSD,
+    description: 'You can now top-up your Taxify balance with USSD',
+    icon: '',
+    is_default: false,
+    is_for_ride: false,
+    is_for_topup: true,
+    paystack_channel: PaystackChannels.ussd,
+  },
+  {
+    name: PaymentMethodsEnum.BANK_TRANSFER,
+    description: 'You can now top-up your Taxify balance with Bank transfer',
+    icon: '',
+    is_default: false,
+    is_for_ride: false,
+    is_for_topup: true,
+    paystack_channel: PaystackChannels.bank_transfer,
+  },
+  {
+    name: PaymentMethodsEnum.CARD,
+    description:
+      'You can now top-up your Taxify balance and pay for rides with your credit or debit card',
+    icon: '',
+    is_default: false,
+    is_for_ride: true,
+    is_for_topup: true,
+    paystack_channel: PaystackChannels.card,
+  },
+  {
+    name: PaymentMethodsEnum.WALLET,
+    description: 'You can pay for rides with your Taxify wallet balance',
+    icon: '',
+    is_default: true,
+    is_for_ride: true,
+    is_for_topup: false,
   },
 ];

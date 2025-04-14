@@ -90,6 +90,7 @@ export enum DBCollections {
   Address = 'address',
   Card = 'card',
   Transaction = 'transaction',
+  PaymentMethod = 'payment_method',
 }
 
 export const Images = {

@@ -45,6 +45,15 @@ const WalletSchema = createSchema<Wallet>({
   paystack_customer_id: {
     type: String,
   },
+  payment_methods: {
+    type: [
+      {
+        type: String,
+        ref: DBCollections.PaymentMethod,
+      },
+    ],
+    default: [],
+  },
 });
 
 const restrictedOperations: MongooseQueryOrDocumentMiddleware[] = [

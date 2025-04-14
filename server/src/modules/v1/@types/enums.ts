@@ -52,9 +52,11 @@ export enum TransactionStatus {
 }
 
 export enum PaymentMethods {
-  CARD = 'card',
-  CASH = 'cash',
-  WALLET = 'wallet',
+  CARD = 'Credit or debit card',
+  CASH = 'Cash',
+  WALLET = 'Wallet',
+  BANK_TRANSFER = 'Bank Transfer',
+  USSD = 'Ussd',
 }
 
 export enum PaystackChannels {

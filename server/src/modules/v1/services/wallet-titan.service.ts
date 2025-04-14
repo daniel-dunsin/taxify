@@ -1,5 +1,5 @@
 import { HttpStatusCode } from '../../../utils/constants';
-import { BankDetails, User } from '../@types/db';
+import { BankDetails, Card, User, Wallet } from '../@types/db';
 import { HttpError } from '../@types/globals';
 import walletModel from '../models/wallet.model';
 import cardModel from '../models/card.model';
@@ -7,6 +7,7 @@ import transactionModel from '../models/transaction.model';
 import {
   PaymentMethods,
   PaystackChannels,
+  Role,
   TranasactionReason,
   TransactionDirection,
 } from '../@types/enums';
@@ -14,13 +15,30 @@ import * as walletService from './wallet-titan.service';
 import { generateUniqueModelProperty } from '../../../utils';
 import paystackProvider from '../providers/paystack';
 import { userModel } from '../models/user.model';
+import paymentMethodModel from '../models/payment_methods.model';
 
 export const getWallet = async (user_id: string) => {
-  const data = await walletModel
-    .findOne({ user: user_id })
-    .select('-user -driver -createdAt -updatedAt');
+  const user = await userModel.findOne({ _id: user_id });
 
-  if (!data) throw new HttpError(HttpStatusCode.NotFound, 'Wallet not found');
+  if (!user) throw new HttpError(HttpStatusCode.NotFound, 'User not found');
+
+  const wallet = await walletModel
+    .findOne({ user: user_id })
+    .select('-user -driver -createdAt -updatedAt')
+    .populate({ path: 'payment_methods', match: { is_wallet: false } });
+
+  if (!wallet) throw new HttpError(HttpStatusCode.NotFound, 'Wallet not found');
+
+  const data: Wallet & { card?: Card } = {
+    ...wallet.toObject(),
+  };
+
+  if (user.role == Role.User) {
+    const card = await cardModel.findOne({ user: user_id });
+    data.card = card!;
+  } else {
+    delete data.payment_methods;
+  }
 
   return {
     success: true,
@@ -53,6 +71,10 @@ export const createWallet = async (
     );
   }
 
+  const default_payment_methods = await paymentMethodModel.find({
+    is_default: true,
+  });
+
   await walletModel.create({
     driver: user?.driver_id,
     user: user?._id,
@@ -63,10 +85,11 @@ export const createWallet = async (
     bank_code: user?.bank_code,
     paystack_customer_code: paystack_customer?.customer_code,
     paystack_customer_id: paystack_customer?.id,
+    ...(user.role === Role.User && default_payment_methods),
   });
 };
 
-export const createCard = async (userId: string) => {
+const createCard = async (userId: string) => {
   const user = await userModel.findById(userId);
 
   if (!user) throw new HttpError(HttpStatusCode.NotFound, 'User not found');
@@ -88,8 +111,12 @@ export const createCard = async (userId: string) => {
     'TRX'
   );
 
+  const card_payment_method = await paymentMethodModel.findOne({
+    name: PaymentMethods.CARD,
+  });
+
   const transaction = await transactionModel.create({
-    payment_method: PaymentMethods.CARD,
+    payment_method: card_payment_method?._id,
     payment_for: TranasactionReason.ChargeCard,
     user: userId,
     wallet: wallet?.data?._id,
@@ -111,9 +138,133 @@ export const createCard = async (userId: string) => {
     currency: 'NGN',
   });
 
+  return data;
+};
+
+export const getUnavailablePaymentMethods = async (user_id: string) => {
+  const wallet = await walletModel.findOne({ user: user_id });
+
+  if (!wallet) throw new HttpError(HttpStatusCode.NotFound, 'Wallet not found');
+
+  const data = await paymentMethodModel.find({
+    _id: { $nin: wallet.payment_methods },
+  });
+
   return {
     success: true,
-    msg: 'Charge initiated',
+    msg: 'Unavailable payment methods fetched',
     data,
   };
+};
+
+export const getTopUpPaymentMethods = async (user_id: string) => {
+  const wallet = await walletModel.findOne({ user: user_id });
+
+  if (!wallet) throw new HttpError(HttpStatusCode.NotFound, 'Wallet not found');
+
+  const data = await paymentMethodModel.find({
+    _id: { $in: wallet.payment_methods },
+    is_for_topup: true,
+  });
+
+  return {
+    success: true,
+    msg: 'top-up payment methods fetched',
+    data,
+  };
+};
+
+export const getRidePaymentMethods = async (user_id: string) => {
+  const wallet = await walletModel.findOne({ user: user_id });
+
+  if (!wallet) throw new HttpError(HttpStatusCode.NotFound, 'Wallet not found');
+
+  const data = await paymentMethodModel.find({
+    _id: { $in: wallet.payment_methods },
+    is_for_ride: true,
+  });
+
+  return {
+    success: true,
+    msg: 'ride payment methods fetched',
+    data,
+  };
+};
+
+export const deletePaymentMethod = async (
+  user_id: string,
+  paymentMethodId: string
+) => {
+  const paymentMethod = await paymentMethodModel.findById(paymentMethodId);
+
+  if (!paymentMethod)
+    throw new HttpError(HttpStatusCode.NotFound, 'Payment method not found');
+
+  const wallet = await walletModel.findOne({ user: user_id });
+
+  if (!wallet) throw new HttpError(HttpStatusCode.NotFound, 'Wallet not found');
+  if (!wallet.payment_methods?.includes?.(paymentMethodId))
+    throw new HttpError(
+      HttpStatusCode.NotFound,
+      'Payment method not found in profile'
+    );
+
+  await walletModel.updateOne(
+    { _id: wallet._id },
+    { $pull: { payment_methods: paymentMethodId } }
+  );
+
+  if (paymentMethod.name === PaymentMethods.CARD) {
+    await cardModel.deleteOne({ user: wallet.user });
+  }
+
+  return {
+    success: true,
+    msg: 'Payment method removed',
+  };
+};
+
+export const addPaymentMethod = async (
+  user_id: string,
+  paymentMethodId: string
+) => {
+  const paymentMethod = await paymentMethodModel.findById(paymentMethodId);
+
+  if (!paymentMethod)
+    throw new HttpError(HttpStatusCode.NotFound, 'Payment method not found');
+
+  const wallet = await walletModel.findOne({ user: user_id });
+
+  if (!wallet) throw new HttpError(HttpStatusCode.NotFound, 'Wallet not found');
+  if (wallet.payment_methods?.includes?.(paymentMethodId))
+    throw new HttpError(
+      HttpStatusCode.NotFound,
+      'Payment method has been added to wallet already'
+    );
+
+  if (paymentMethod.name != PaymentMethods.CARD) {
+    await walletModel.updateOne(
+      { _id: wallet._id },
+      { $push: { payment_methods: paymentMethodId } }
+    );
+
+    return {
+      success: true,
+      msg: 'Payment method added',
+      meta: {
+        has_authorization: false,
+      },
+    };
+  } else {
+    const data = await createCard(user_id);
+
+    return {
+      success: true,
+      msg: 'Payment method creation initiated',
+      data,
+      meta: {
+        has_authorization: true,
+      },
+    };
+  }
 };

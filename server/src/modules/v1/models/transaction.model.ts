@@ -3,7 +3,6 @@ import { createSchema } from '../../../utils';
 import { DBCollections } from '../../../utils/constants';
 import { Transaction } from '../@types/db';
 import {
-  PaymentMethods,
   TranasactionReason,
   TransactionDirection,
   TransactionStatus,
@@ -12,7 +11,7 @@ import {
 const TransactionSchema = createSchema<Transaction>({
   payment_method: {
     type: String,
-    enum: Object.values(PaymentMethods),
+    ref: DBCollections.PaymentMethod,
   },
   card: {
     type: String,

@@ -2,6 +2,7 @@ import { CardAuthorization } from '../providers/paystack/types';
 import {
   DriverStatus,
   PaymentMethods,
+  PaystackChannels,
   PresetAddresses,
   Role,
   TokenType,
@@ -113,6 +114,7 @@ export interface Wallet extends DbMixins, BankDetails {
   currency_symbol: string;
   paystack_customer_code?: string;
   paystack_customer_id?: string;
+  payment_methods?: (PaymentMethod | string)[];
 }
 
 export interface Address extends DbMixins {
@@ -135,8 +137,8 @@ export interface Card extends DbMixins, CardAuthorization {
   is_active: boolean;
 }
 
-export interface Transaction {
-  payment_method: PaymentMethods;
+export interface Transaction extends DbMixins {
+  payment_method: PaymentMethod;
   card: Card;
   payment_for: TranasactionReason;
   user: User;
@@ -152,4 +154,14 @@ export interface Transaction {
   refund_reason: string;
   amount_refunded: number;
   meta: string;
+}
+
+export interface PaymentMethod extends DbMixins {
+  name: PaymentMethods;
+  paystack_channel?: PaystackChannels;
+  description: string;
+  icon: string;
+  is_for_topup: boolean;
+  is_for_ride: boolean;
+  is_default: boolean;
 }

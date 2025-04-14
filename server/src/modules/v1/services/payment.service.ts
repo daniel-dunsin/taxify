@@ -10,7 +10,11 @@ import {
   WebhookResponse,
 } from '../providers/paystack/types';
 import transactionModel from '../models/transaction.model';
-import { TranasactionReason, TransactionStatus } from '../@types/enums';
+import {
+  PaymentMethods,
+  TranasactionReason,
+  TransactionStatus,
+} from '../@types/enums';
 import { Transaction } from '../@types/db';
 import { isEmpty } from 'lodash';
 import cardModel from '../models/card.model';
@@ -18,6 +22,7 @@ import { userModel } from '../models/user.model';
 import paystackProvider from '../providers/paystack';
 import pushQueue from '../queues/push-notification';
 import walletModel from '../models/wallet.model';
+import paymentMethodModel from '../models/payment_methods.model';
 
 const logger = new Logger('PaymentService');
 const webhookLogger = new Logger('webhookService');
@@ -81,12 +86,25 @@ const processCardCharge = async (webhookData: ChargeResponse) => {
   if (!user) throw new HttpError(HttpStatusCode.NotFound, 'User not found');
 
   if (!isEmpty(webhookData.authorization)) {
+    const card_payment_method = await paymentMethodModel.findOne({
+      name: PaymentMethods.CARD,
+    });
+
     await cardModel.create({
       ...webhookData.authorization,
       user: transaction.user,
       email: user?.email,
       is_active: true,
     });
+
+    await walletModel.updateOne(
+      { user: user._id },
+      {
+        $push: {
+          payment_methods: card_payment_method?._id,
+        },
+      }
+    );
 
     logger.log(`Card created for ${user?.email} processing refund...`);
 
