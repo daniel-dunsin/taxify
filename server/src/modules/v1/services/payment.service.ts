@@ -71,7 +71,35 @@ export const lookupAccount = async (lookupAccountDto: LookupAccountDto) => {
   }
 };
 
-const processFundWallet = async (webhookData: ChargeResponse) => {};
+const processFundWallet = async (webhookData: ChargeResponse) => {
+  const transaction = await transactionModel.findOne({
+    transaction_reference: webhookData.reference,
+  });
+
+  if (!transaction)
+    throw new HttpError(HttpStatusCode.NotFound, 'Transaction not found');
+
+  const user = await userModel.findOne({ _id: transaction.user });
+
+  if (!user) throw new HttpError(HttpStatusCode.NotFound, 'User not found');
+
+  await walletModel.updateOne(
+    { user: user._id },
+    { $inc: { balance: transaction.subtotal } }
+  );
+
+  transaction.status = TransactionStatus.Successful;
+  await transaction.save();
+
+  await pushQueue.add({
+    title: 'Card charge',
+    body: `Your card charge was successful, your wallet has been funded with ₦${transaction.subtotal?.toLocaleString()}`,
+    user_id: user?._id,
+    data: {
+      redirect_url: '/account/wallet',
+    },
+  });
+};
 
 const processCardCharge = async (webhookData: ChargeResponse) => {
   const transaction = await transactionModel.findOne({
@@ -134,6 +162,7 @@ const processRefund = async (webhookData: RefundResponse) => {
     throw new HttpError(HttpStatusCode.NotFound, 'Transaction not found');
 
   transaction.status = TransactionStatus.Refunded;
+  transaction.amount_refunded = webhookData.amount;
   await transaction.save();
 
   await pushQueue.add({
@@ -227,6 +256,7 @@ export const processPaystackWebhook = async (body: WebhookResponse) => {
     webhookLogger.log(`Webhook ran successfully ${JSON.stringify(body)}`);
     return true;
   } catch (error) {
+    console.log(error);
     webhookLogger.error(
       `Webhook failed, \nerror: ${JSON.stringify(
         error

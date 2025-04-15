@@ -9,3 +9,12 @@ export const updatePaymentMethodSchema = Joi.object({
 export type UpdatePaymentMethodParams = Joi.extractType<
   typeof updatePaymentMethodSchema
 >['params'];
+
+export const fundWalletSchema = Joi.object({
+  body: Joi.object({
+    payment_method_id: Joi.string().required(),
+    amount: Joi.number().required(),
+  }),
+});
+
+export type FundWalletDto = Joi.extractType<typeof fundWalletSchema>['body'];

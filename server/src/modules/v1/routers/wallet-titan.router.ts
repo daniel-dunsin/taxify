@@ -2,6 +2,7 @@ import { Router } from 'express';
 import {
   addPaymentMethod,
   deletePaymentMethod,
+  fundWallet,
   getRidePaymentMethods,
   getTopUpPaymentMethods,
   getUnavailablePaymentMethods,
@@ -10,7 +11,10 @@ import {
 import { authMiddleware } from '../middlewares/auth.middleware';
 import { Role } from '../@types/enums';
 import { validationMiddleware } from '../schemas';
-import { updatePaymentMethodSchema } from '../schemas/wallet-titan.schema';
+import {
+  fundWalletSchema,
+  updatePaymentMethodSchema,
+} from '../schemas/wallet-titan.schema';
 
 const walletTitanRouter = Router();
 
@@ -41,6 +45,12 @@ walletTitanRouter.delete(
   validationMiddleware(updatePaymentMethodSchema),
   authMiddleware([Role.User]),
   deletePaymentMethod
+);
+walletTitanRouter.post(
+  '/fund',
+  validationMiddleware(fundWalletSchema),
+  authMiddleware([Role.User]),
+  fundWallet
 );
 
 export default walletTitanRouter;

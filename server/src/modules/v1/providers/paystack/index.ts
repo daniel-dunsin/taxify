@@ -17,7 +17,7 @@ import { Request } from 'express';
 
 const logger = new Logger('paystackProvider');
 
-export const getFee = (amount: number) => {
+const getFee = (amount: number) => {
   let fee = amount * 0.015;
   if (amount >= 2500) {
     fee += 100;
@@ -169,6 +169,7 @@ const paystackProvider = {
   chargeCard,
   initiateRefund,
   webhookGuard,
+  getFee,
 };
 
 export default paystackProvider;

@@ -1,7 +1,10 @@
 import { Request } from 'express';
 import { asyncHandler } from '../../../utils';
 import * as walletTitanService from '../services/wallet-titan.service';
-import { UpdatePaymentMethodParams } from '../schemas/wallet-titan.schema';
+import {
+  FundWalletDto,
+  UpdatePaymentMethodParams,
+} from '../schemas/wallet-titan.schema';
 
 export const getWallet = asyncHandler((req, res) =>
   walletTitanService.getWallet(req.user?._id!)
@@ -33,4 +36,8 @@ export const addPaymentMethod = asyncHandler(
       req.user?._id!,
       req.params?.payment_method_id!
     )
+);
+
+export const fundWallet = asyncHandler((req: Request<{}, {}, FundWalletDto>) =>
+  walletTitanService.fundWallet(req.user?._id!, req.body)
 );

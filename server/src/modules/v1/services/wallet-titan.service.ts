@@ -1,5 +1,5 @@
 import { HttpStatusCode } from '../../../utils/constants';
-import { BankDetails, Card, User, Wallet } from '../@types/db';
+import { BankDetails, Card, Transaction, User, Wallet } from '../@types/db';
 import { HttpError } from '../@types/globals';
 import walletModel from '../models/wallet.model';
 import cardModel from '../models/card.model';
@@ -10,12 +10,15 @@ import {
   Role,
   TranasactionReason,
   TransactionDirection,
+  TransactionStatus,
 } from '../@types/enums';
 import * as walletService from './wallet-titan.service';
 import { generateUniqueModelProperty } from '../../../utils';
 import paystackProvider from '../providers/paystack';
 import { userModel } from '../models/user.model';
 import paymentMethodModel from '../models/payment_methods.model';
+import { FundWalletDto } from '../schemas/wallet-titan.schema';
+import { HydratedDocument } from 'mongoose';
 
 export const getWallet = async (user_id: string) => {
   const user = await userModel.findOne({ _id: user_id });
@@ -296,4 +299,104 @@ export const addPaymentMethod = async (
       },
     };
   }
+};
+
+export const fundWallet = async (user_id: string, body: FundWalletDto) => {
+  const { amount, payment_method_id } = body!;
+
+  const payment_method = await paymentMethodModel.findById(payment_method_id);
+
+  if (!payment_method)
+    throw new HttpError(HttpStatusCode.NotFound, 'Payment method not found');
+  if (!payment_method.is_for_topup)
+    throw new HttpError(
+      HttpStatusCode.BadRequest,
+      'Payment method not allowed for top-up'
+    );
+  if (!payment_method.paystack_channel)
+    throw new HttpError(
+      HttpStatusCode.BadRequest,
+      'Payment method not in use yet!'
+    );
+
+  const user = await userModel.findById(user_id);
+
+  if (!user) throw new HttpError(HttpStatusCode.NotFound, 'User not found');
+
+  const wallet = await walletModel.findOne({ user: user_id });
+
+  if (!wallet) throw new HttpError(HttpStatusCode.NotFound, 'Wallet not found');
+  if (!wallet.payment_methods?.includes(payment_method_id)) {
+    throw new HttpError(
+      HttpStatusCode.BadRequest,
+      'Payment method not allowed'
+    );
+  }
+
+  const { fee, grossAmount } = paystackProvider.getFee(amount!);
+
+  const transaction_reference = await generateUniqueModelProperty(
+    transactionModel,
+    'transaction_reference',
+    'TRX'
+  );
+
+  const transaction = await transactionModel.create({
+    payment_method: payment_method._id,
+    payment_for: TranasactionReason.FundWallet,
+    user: user_id,
+    wallet: wallet._id,
+    amount: grossAmount,
+    currency: 'NGN',
+    transaction_reference,
+    status: TransactionStatus.Pending,
+    direction: TransactionDirection.Credit,
+    subtotal: amount!,
+    processing_fee: fee,
+  });
+
+  let data;
+  let redirect_to_provider;
+
+  if (payment_method.name != PaymentMethods.CARD) {
+    data = await paystackProvider.initiateCharge({
+      amount: amount!,
+      email: user?.email,
+      fee_inclusive: true,
+      currency: 'NGN',
+      reference: transaction_reference,
+      metadata: JSON.stringify(transaction),
+      channels: [payment_method.paystack_channel],
+    });
+
+    redirect_to_provider = true;
+  } else {
+    const card = await cardModel.findOne({ user: user_id, is_active: true });
+
+    if (!card) throw new HttpError(HttpStatusCode.NotFound, 'Card not found');
+
+    transaction.card = card;
+    await transaction.save();
+
+    await paystackProvider.chargeCard({
+      authorization_code: card.authorization_code,
+      email: card.email,
+      amount: amount!,
+      fee_inclusive: true,
+      reference: transaction_reference,
+      metadata: JSON.stringify(transaction),
+      currency: 'NGN',
+    });
+
+    redirect_to_provider = false;
+  }
+
+  return {
+    success: true,
+    msg: redirect_to_provider ? 'Wallet funding initiated' : 'Wallet funded',
+    data,
+    meta: {
+      redirect_to_provider,
+    },
+  };
 };
