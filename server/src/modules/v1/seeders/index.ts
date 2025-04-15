@@ -2,7 +2,7 @@ import Logger from '../../../configs/logger';
 import paymentMethodModel from '../models/payment_methods.model';
 import vehicleCategoryModel from '../models/vehicle-category.model';
 import vehicleGroupModel from '../models/vehicle-group.model';
-import { PaymentMethods, VehicleCategories, VehicleGroups } from './seeds';
+import { PaymentMethodsSeed, VehicleCategories, VehicleGroups } from './seeds';
 
 const logger = new Logger('seeders');
 
@@ -31,7 +31,7 @@ const seedPaymentMethods = async () => {
 
   if (count === 0) {
     logger.log('Seeding payment methods');
-    await paymentMethodModel.create(PaymentMethods);
+    await paymentMethodModel.create(PaymentMethodsSeed);
     logger.log('Seeded payment methods');
   }
 };

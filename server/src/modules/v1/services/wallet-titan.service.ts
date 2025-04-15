@@ -25,17 +25,36 @@ export const getWallet = async (user_id: string) => {
   const wallet = await walletModel
     .findOne({ user: user_id })
     .select('-user -driver -createdAt -updatedAt')
-    .populate({ path: 'payment_methods', match: { is_wallet: false } });
+    .populate({
+      path: 'payment_methods',
+      options: { name: { $ne: PaymentMethods.WALLET } },
+      select: '-updatedAt -createdAt',
+    });
 
   if (!wallet) throw new HttpError(HttpStatusCode.NotFound, 'Wallet not found');
 
-  const data: Wallet & { card?: Card } = {
+  const data: any = {
     ...wallet.toObject(),
   };
 
   if (user.role == Role.User) {
-    const card = await cardModel.findOne({ user: user_id });
-    data.card = card!;
+    data.payment_methods = await Promise.all(
+      data.payment_methods?.map(async (pm: any) => {
+        if (pm.name === PaymentMethods.CARD) {
+          const card = await cardModel
+            .findOne({
+              user: user_id,
+              is_active: true,
+            })
+            .select(
+              'bin last4 exp_month exp_year bank country_code brand account_name'
+            );
+          pm.card = card!;
+        }
+
+        return pm;
+      })
+    );
   } else {
     delete data.payment_methods;
   }
@@ -85,7 +104,9 @@ export const createWallet = async (
     bank_code: user?.bank_code,
     paystack_customer_code: paystack_customer?.customer_code,
     paystack_customer_id: paystack_customer?.id,
-    ...(user.role === Role.User && default_payment_methods),
+    ...(user.role === Role.User
+      ? { payment_methods: default_payment_methods }
+      : {}),
   });
 };
 
@@ -199,6 +220,11 @@ export const deletePaymentMethod = async (
 
   if (!paymentMethod)
     throw new HttpError(HttpStatusCode.NotFound, 'Payment method not found');
+  if (paymentMethod.is_default)
+    throw new HttpError(
+      HttpStatusCode.BadRequest,
+      "You can't remove a default payment method"
+    );
 
   const wallet = await walletModel.findOne({ user: user_id });
 
@@ -215,7 +241,10 @@ export const deletePaymentMethod = async (
   );
 
   if (paymentMethod.name === PaymentMethods.CARD) {
-    await cardModel.deleteOne({ user: wallet.user });
+    await cardModel.updateOne(
+      { user: wallet.user, is_active: true },
+      { is_active: false }
+    );
   }
 
   return {

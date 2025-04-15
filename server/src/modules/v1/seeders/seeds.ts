@@ -57,7 +57,7 @@ export const VehicleGroups: Omit<
   },
 ];
 
-export const PaymentMethods: Omit<
+export const PaymentMethodsSeed: Omit<
   PaymentMethod,
   '_id' | 'createdAt' | 'updatedAt'
 >[] = [
@@ -65,7 +65,7 @@ export const PaymentMethods: Omit<
     name: PaymentMethodsEnum.CASH,
     description:
       "Your driver's phone will show you the amount to pay at the end of the trip",
-    icon: '',
+    icon: 'https://res.cloudinary.com/dyq7aipu8/image/upload/v1744702566/money_3636023_svhm4o.png',
     is_for_ride: true,
     is_for_topup: false,
     is_default: true,
@@ -73,7 +73,7 @@ export const PaymentMethods: Omit<
   {
     name: PaymentMethodsEnum.USSD,
     description: 'You can now top-up your Taxify balance with USSD',
-    icon: '',
+    icon: 'https://res.cloudinary.com/dyq7aipu8/image/upload/v1744702565/smartphone_2824165_tmawxb.png',
     is_default: false,
     is_for_ride: false,
     is_for_topup: true,
@@ -82,7 +82,7 @@ export const PaymentMethods: Omit<
   {
     name: PaymentMethodsEnum.BANK_TRANSFER,
     description: 'You can now top-up your Taxify balance with Bank transfer',
-    icon: '',
+    icon: 'https://res.cloudinary.com/dyq7aipu8/image/upload/v1744702758/safebox_2254690_mjuhdr.png',
     is_default: false,
     is_for_ride: false,
     is_for_topup: true,
@@ -92,7 +92,7 @@ export const PaymentMethods: Omit<
     name: PaymentMethodsEnum.CARD,
     description:
       'You can now top-up your Taxify balance and pay for rides with your credit or debit card',
-    icon: '',
+    icon: 'https://res.cloudinary.com/dyq7aipu8/image/upload/v1744702566/payment-mehotd_12261842_dfpozd.png',
     is_default: false,
     is_for_ride: true,
     is_for_topup: true,
@@ -101,7 +101,7 @@ export const PaymentMethods: Omit<
   {
     name: PaymentMethodsEnum.WALLET,
     description: 'You can pay for rides with your Taxify wallet balance',
-    icon: '',
+    icon: 'https://res.cloudinary.com/dyq7aipu8/image/upload/v1744702759/wallet_584026_bae3xm.png',
     is_default: true,
     is_for_ride: true,
     is_for_topup: false,
